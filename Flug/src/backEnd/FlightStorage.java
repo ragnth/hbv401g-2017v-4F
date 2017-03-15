@@ -16,12 +16,12 @@ public class FlightStorage {
 	
 	public static void main(String[] args){
 		for(int i = 0; i<100; i++){
-			int a = 0 + (int)(Math.random()*12);
-			int b = 1 + (int)(Math.random()*30);
-			int c = 1 + (int)(Math.random()*60);
-			int e = 1 + (int)(Math.random()*24);
-			int m = 1 + (int)(Math.random()*60);
-			Date d = new Date(117, a, b, e, c, m);
+			int m = 0 + (int)(Math.random()*12); //Bua til manud
+			int d = 1 + (int)(Math.random()*30); // Bua til dagsetningu
+			int mi = 1 + (int)(Math.random()*60); // Bua til minutu
+			int h = 1 + (int)(Math.random()*24); //Bua til klukkutima
+			int s = 1 + (int)(Math.random()*60); // bua til sek
+			Date d = new Date(117, m, d, h, mi, s);
 			dateList.add(d);
 		
 		}
