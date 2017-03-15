@@ -1,5 +1,5 @@
 package backEnd;
 
-public class PassengerList {
+public class PassengerStorage {
 	Passenger[] list;
 }
