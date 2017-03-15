@@ -4,14 +4,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class FlightStorage {
-<<<<<<< HEAD
 
-	//ArrayList <Flight> flightList = new ArrayList<Flight>();
-	//flightList.add( new Flight("FB0101", "Wow Air", (new Date(2017+1990, 5, 23, 0800, 45, 23))  ));
+	ArrayList <Flight> flightList = new ArrayList<Flight>();
 	@SuppressWarnings("deprecation")
 	static
 	ArrayList <Date> dateList = new ArrayList<Date>();
-	
 	
 	public static void main(String[] args){
 		for(int i = 0; i<100; i++){
@@ -28,16 +25,12 @@ public class FlightStorage {
 		for(int i = 0; i<100; i++)
 			System.out.println(dateList.get(i).toString());
 
+		//flightList.add( new Flight("FB0101", "Wow Air", (new Date(2017+1990, 5, 23, 0800, 45, 23))  ));
+		
+		
+		
+		
+		
 	}
-	
-	
-	
-	
 
-
-	
-=======
-//kdlfæksædlkfaælkfs
-//kaæsldfkasælkd
->>>>>>> origin/master
 }
