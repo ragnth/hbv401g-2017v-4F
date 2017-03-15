@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class FlightStorage {
+<<<<<<< HEAD
 
 	//ArrayList <Flight> flightList = new ArrayList<Flight>();
 	//flightList.add( new Flight("FB0101", "Wow Air", (new Date(2017+1990, 5, 23, 0800, 45, 23))  ));
@@ -35,4 +36,8 @@ public class FlightStorage {
 
 
 	
+=======
+//kdlfæksædlkfaælkfs
+//kaæsldfkasælkd
+>>>>>>> origin/master
 }
