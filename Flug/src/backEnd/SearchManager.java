@@ -4,7 +4,7 @@ import java.sql.Time;
 
 public class SearchManager {
 	
-	SearchInfo search = new SearchInfo();
+	SearchInfo search;
 	Flight[] flightList = new Flight[100]; 
 	//breyta seinna
 	Time maximumTravelTime = new Time(0);
@@ -22,7 +22,9 @@ public class SearchManager {
 	}
 	
 
-	
+	public static void main(String[] args){
+		//search = new SearchInfo()
+	}
 	
 	
 	
