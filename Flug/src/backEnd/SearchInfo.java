@@ -16,6 +16,7 @@ public class SearchInfo {
 		this.destination = destination; 
 		this.departureDate = departureDate;
 		this.returnDate = returnDate;
+		//roundTrip
 		//baeta vid passenger	
 	}
 	
