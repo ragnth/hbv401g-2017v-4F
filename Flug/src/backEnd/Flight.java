@@ -1,31 +1,61 @@
 package backEnd;
 
-import java.sql.Time;
 import java.util.Date;
 
 public class Flight {
-	public int id;
-	//implement flightNumber later 
-	public Date date;
-	public Time departureTime;
-	public Time arrivalTime;
-	public String flyingFrom;
-	public String flyingTo;
+	public String flightNumber;
+	public String airline;
+	public String origin;
+	public String destination;
+	public Date departureTime;
+	public Date arrivalTime;
 	public Boolean bags;
-	public double price;
+	public int price;
 	public int availableSeats;
 	
-	public Flight(Date date, Time departureTime, Time arrivalTime, String flyingFrom, String flyingTo, Boolean bags, double price, int availableSeats){
-		this.date = date;
+	public Flight(String flightNumber, String airline, Date departureTime, Date arrivalTime, String origin, String destination, Boolean bags, int price, int availableSeats){
+		this.flightNumber = flightNumber;
+		this.airline = airline;
 		this.departureTime = departureTime;
 		this.arrivalTime = arrivalTime;
-		this.flyingFrom = flyingFrom;
-		this.flyingTo = flyingTo;
+		this.origin = origin;
+		this.destination = destination;
 		this.bags = bags;
 		this.price = price;
 		this.availableSeats = availableSeats;
 		
 	}
 	
+	public String getFlightNumber(){
+		return flightNumber;
+	}
+	
+	public String getAirline(){
+		return airline;
+	}
+	
+	public String getOrigin(){
+		return origin;
+	}
+	
+	public String getDestination(){
+		return destination;
+	}
+	
+	public Date getDepartureTime(){
+		return departureTime;
+	}
+	
+	public Date getarrivalTime(){
+		return departureTime;
+	}	
+
+	public Boolean getBags(){
+		return bags;
+	}
+
+	public int getPrice(){
+		return price;
+	}
 	
 }
