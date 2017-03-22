@@ -42,7 +42,7 @@ public class FlightStorage {
 			
 			flightList.add( new Flight("FB0101", "Wow Air", dateList.get(index), myDate, "KEF", "JFK", true, verd, 30));		
 		}
-		
+		//
 		//for(int i = 0; i<1000; i++)
 		//	System.out.println(flightList.get(i).getDepartureTime().toString()+" : " + flightList.get(i).getPrice());
 		
