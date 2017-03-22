@@ -4,7 +4,6 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 public class SearchManager {
 	static SearchInfo search;
@@ -18,7 +17,12 @@ public class SearchManager {
 	Boolean excludeOvernightFlights = false;
 	static ArrayList<Flight> departResults;
 	static ArrayList<Flight> returnResults;
-
+    
+	public static void createSearch(String origin, String destination, Date in, Date out){
+		search = new SearchInfo(origin, destination, in, out);
+		System.out.println("hæ");
+		//searchForFlights(search);
+	}
 	
 	public static void searchForFlights(SearchInfo search){
 		//Flug ut
@@ -57,15 +61,15 @@ public class SearchManager {
 		//quicksort a flightList[i].getPrice()
 	}
 	
-
+/*
 	public static void main(String[] args){
-		@SuppressWarnings("deprecation")
-		Date depart = new Date(117, 8, 20);
-		@SuppressWarnings("deprecation")
-		Date arrive = new Date(117, 8, 25);
-		search = new SearchInfo(storage.getRandomCountry(), storage.getRandomCountry(), depart, arrive);
-		System.out.println("My search: " + search.getOrigin() + " to " + search.getDestination() + " " + search.getDepartureDate());
-		searchForFlights(search);
+		//@SuppressWarnings("deprecation")
+		//Date depart = new Date(117, 8, 20);
+		//@SuppressWarnings("deprecation")
+		//Date arrive = new Date(117, 8, 25);
+		//search = new SearchInfo(storage.getRandomCountry(), storage.getRandomCountry(), depart, arrive);
+		//System.out.println("My search: " + search.getOrigin() + " to " + search.getDestination() + " " + search.getDepartureDate());
+		//searchForFlights(search);
 		//ef engin flug
 		
 		if(departResults.size()==0)
@@ -87,11 +91,6 @@ public class SearchManager {
 		}
 		
 	}
-	
-	
-	
-	
-	
-	
+	*/
 	
 }

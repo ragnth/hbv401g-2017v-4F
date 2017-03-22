@@ -20,8 +20,8 @@ public class FlightStorage {
 		generateCountries();
 		generateFlights();
 	   //print flights
-		//for(int i = 0 ; i<flightList.size(); i++)
-	    //	System.out.println(flightList.get(i).getOrigin() + " -> " + flightList.get(i).getDestination());
+		for(int i = 0 ; i<flightList.size(); i++)
+	    	System.out.println(flightList.get(i).getOrigin() + " -> " + flightList.get(i).getDestination());
 	}
 	
 	//búum til random dagsetningar
@@ -45,7 +45,6 @@ public class FlightStorage {
 			Locale obj = new Locale("", countryCode);
 			countries[i]=obj;
 			i++;
-
 		}
 	}
 	
