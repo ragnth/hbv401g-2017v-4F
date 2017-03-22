@@ -23,6 +23,7 @@ public class SearchManager {
 	public static void searchForFlights(SearchInfo search){
 		//Flug ut
 		departResults = new ArrayList<Flight>();
+		
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTime(search.getDepartureDate()); //
 		for(int i = 0; i<flightList.size(); i++){
@@ -30,7 +31,8 @@ public class SearchManager {
 			cal2.setTime(flightList.get(i).getDepartureTime());
 			boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
 			                  cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
-			if(sameDay){
+			
+			if(sameDay && search.getOrigin()==flightList.get(i).getOrigin() && search.getDestination() == flightList.get(i).getDestination()){
 				departResults.add(flightList.get(i));
 			}
 		}
@@ -44,7 +46,7 @@ public class SearchManager {
 			cal2.setTime(flightList.get(i).getDepartureTime());
 			boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
 			                  cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
-			if(sameDay){
+			if(sameDay && search.getDestination()==flightList.get(i).getOrigin() && search.getOrigin() == flightList.get(i).getDestination()){
 				returnResults.add(flightList.get(i));
 			}
 		}
@@ -61,16 +63,18 @@ public class SearchManager {
 		Date depart = new Date(117, 8, 20);
 		@SuppressWarnings("deprecation")
 		Date arrive = new Date(117, 8, 25);
-		search = new SearchInfo("KEF", "JFK", depart, arrive);
+		search = new SearchInfo(storage.getRandomCountry(), storage.getRandomCountry(), depart, arrive);
+		System.out.println("My search: " + search.getOrigin() + " to " + search.getDestination() + " " + search.getDepartureDate());
 		searchForFlights(search);
-				
 		//ef engin flug
+		
 		if(departResults.size()==0)
 			System.out.println("No outbound flights match this date!");
 		
 		for(int i =0; i< departResults.size(); i++){
-			System.out.println("Outbound flight: " + departResults.get(i).departureTime);
+			System.out.println("Outbound flight: From " + departResults.get(i).getOrigin() + " to  " + departResults.get(i).getDestination() + " " +  departResults.get(i).departureTime);
 		}
+		
 		
 		//ef engin flug heim
 		if(returnResults.size()==0){
@@ -78,11 +82,9 @@ public class SearchManager {
 		}
 		
 		for(int i =0; i< returnResults.size(); i++){
-			System.out.println("Return flight: " + returnResults.get(i).departureTime);
+			System.out.println("Return flight: From " + returnResults.get(i).getOrigin() + " to  " + returnResults.get(i).getDestination() + " " +  returnResults.get(i).departureTime);
+
 		}
-		
-		
-		
 		
 	}
 	

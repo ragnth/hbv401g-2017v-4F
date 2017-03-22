@@ -26,7 +26,7 @@ public class FlightStorage {
 	
 	//búum til random dagsetningar
 	public void generateDates(){
-		for(int i = 0; i<1000; i++){
+		for(int i = 0; i<100000; i++){
 			int a = 0 + (int)(Math.random()*12); //Bua til manud
 			int b = 1 + (int)(Math.random()*30); // Bua til dagsetningu
 			int e = 1 + (int)(Math.random()*24); //Bua til klukkutima
@@ -51,7 +51,7 @@ public class FlightStorage {
 	
 	//búum til random flight list
 	public void generateFlights(){
-		for(int i = 0; i<1000; i++ ){
+		for(int i = 0; i<500000; i++ ){
 			int index = randomGenerator.nextInt(dateList.size());
 			
 			//baetir vid 2 klukkutima vid departureTime og setur i arrival time
@@ -62,16 +62,16 @@ public class FlightStorage {
 			
 			//bua til random verd
 			int verd = 8000 + (int)(Math.random()*100000);
-			
-			//random country
-            int c1 =  (int)(Math.random()*250); //from
-            int c2 =  (int)(Math.random()*250); //to
-
-			flightList.add( new Flight("FB0101", "Wow Air", dateList.get(index), myDate, countries[c1].getDisplayCountry(), countries[c2].getDisplayCountry(), true, verd, 30));		
+		
+			flightList.add( new Flight("FB0101", "Wow Air", dateList.get(index), myDate, getRandomCountry(), getRandomCountry(), true, verd, 30));		
 		}
 	}
 	
-	
+	//erum bar aad prenta ut fyrstu 40 i augnablikinu
+	public String getRandomCountry(){
+        int c =  (int)(Math.random()*20); //breytum thetta i 250 seinna
+		return countries[c].getDisplayCountry();
+	}
 	
 	public ArrayList<Flight> getList(){
 		return flightList;
