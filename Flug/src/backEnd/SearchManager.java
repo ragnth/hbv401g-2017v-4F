@@ -7,8 +7,9 @@ import java.util.Date;
 
 public class SearchManager {
 	static SearchInfo search;
-	 static FlightStorage storage = new FlightStorage();
-	static ArrayList <Flight> flightList = new ArrayList<Flight>();
+	 static FlightStorage storage = new FlightStorage(); //tilvik af FlightStorage
+	static ArrayList <Flight> flightList = new ArrayList<Flight>(storage.getList()); //saekjum listan
+	
 	//breyta seinna
 	Time maximumTravelTime = new Time(0);
 	//veit ekki alveg hvernig vid stofnum Time
@@ -34,7 +35,6 @@ public class SearchManager {
 				departResults.add(flightList.get(i));
 			}
 		}
-		System.out.println(departResults.size());
 		
 		//heimflug
 		returnResults = new ArrayList<Flight>();
@@ -57,25 +57,28 @@ public class SearchManager {
 	
 
 	public static void main(String[] args){
+		@SuppressWarnings("deprecation")
 		Date depart = new Date(117, 8, 20);
+		@SuppressWarnings("deprecation")
 		Date arrive = new Date(117, 8, 25);
 		search = new SearchInfo("KEF", "JFK", depart, arrive);
 		searchForFlights(search);
-		System.out.println(storage.getList().size());
 				
+		//ef engin flug
 		if(departResults.size()==0)
-			System.out.println("Engin flug ut");
+			System.out.println("No outbound flights match this date!");
 		
 		for(int i =0; i< departResults.size(); i++){
-			System.out.println("flug ut " + departResults.get(i).departureTime);
+			System.out.println("Outbound flight: " + departResults.get(i).departureTime);
 		}
 		
+		//ef engin flug heim
 		if(returnResults.size()==0){
-			System.out.println("engin flug heim");
+			System.out.println("No return flights match this date!");
 		}
 		
 		for(int i =0; i< returnResults.size(); i++){
-			System.out.println(returnResults.get(i).departureTime);
+			System.out.println("Return flight: " + returnResults.get(i).departureTime);
 		}
 	}
 	

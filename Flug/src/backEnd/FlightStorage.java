@@ -14,20 +14,31 @@ public class FlightStorage {
 	
 	public FlightStorage(){
 		generateDates();
+		generateFlights();
+		
+		//prentum út lista
+		//for(int i = 0; i<1000; i++)
+		//	System.out.println(flightList.get(i).getDepartureTime().toString()+" : " + flightList.get(i).getPrice());
+		
+		
 	}
 	
-	public static void main(String[] args){
-		for(int i = 0; i<100; i++){
-			int m = 0 + (int)(Math.random()*12); //Bua til manud
-			int k = 1 + (int)(Math.random()*30); // Bua til dagsetningu
-			int mi = 1 + (int)(Math.random()*60); // Bua til minutu
-			int h = 1 + (int)(Math.random()*24); //Bua til klukkutima
-			int s = 1 + (int)(Math.random()*60); // bua til sek
-			Date d = new Date(117, m, k, h, mi, s);
+	//búum til random dagsetningar
+	public void generateDates(){
+		for(int i = 0; i<1000; i++){
+			int a = 0 + (int)(Math.random()*12); //Bua til manud
+			int b = 1 + (int)(Math.random()*30); // Bua til dagsetningu
+			int e = 1 + (int)(Math.random()*24); //Bua til klukkutima
+			int c = 1 + (int)(Math.random()*60); // Bua til minutu
+			int m = 1 + (int)(Math.random()*60); // bua til sek
+			@SuppressWarnings("deprecation")
+			Date d = new Date(117, a, b, e, c, m);
 			dateList.add(d);
-		}
-		
-		//bua til random flight list
+		}	
+	}	
+	
+	//búum til random flight list
+	public void generateFlights(){
 		for(int i = 0; i<1000; i++ ){
 			int index = randomGenerator.nextInt(dateList.size());
 			
@@ -42,38 +53,11 @@ public class FlightStorage {
 			
 			flightList.add( new Flight("FB0101", "Wow Air", dateList.get(index), myDate, "KEF", "JFK", true, verd, 30));		
 		}
-
-		//
-		//for(int i = 0; i<1000; i++)
-		//	System.out.println(flightList.get(i).getDepartureTime().toString()+" : " + flightList.get(i).getPrice());
-		
-		
 	}
-	
 	
 	public ArrayList<Flight> getList(){
 		return flightList;
 	}
-	
-	public void generateDates(){
-		for(int i = 0; i<1000; i++){
-			int a = 0 + (int)(Math.random()*12);
-			int b = 1 + (int)(Math.random()*30);
-			int c = 1 + (int)(Math.random()*60);
-			int e = 1 + (int)(Math.random()*24);
-			int m = 1 + (int)(Math.random()*60);
-			@SuppressWarnings("deprecation")
-			Date d = new Date(117, a, b, e, c, m);
-			dateList.add(d);
-		}
-		
-		
-		
-	}
-	
-     		
-		
-		
 		
 }
 
