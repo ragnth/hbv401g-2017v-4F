@@ -12,21 +12,20 @@ public class FlightStorage {
 	ArrayList <Date> dateList = new ArrayList<Date>();
 	private static Random randomGenerator = new Random();
 	
-<<<<<<< HEAD
 	public FlightStorage(){
 		generateDates();
-=======
+	}
 	
 	public static void main(String[] args){
 		for(int i = 0; i<100; i++){
 			int m = 0 + (int)(Math.random()*12); //Bua til manud
-			int d = 1 + (int)(Math.random()*30); // Bua til dagsetningu
+			int k = 1 + (int)(Math.random()*30); // Bua til dagsetningu
 			int mi = 1 + (int)(Math.random()*60); // Bua til minutu
 			int h = 1 + (int)(Math.random()*24); //Bua til klukkutima
 			int s = 1 + (int)(Math.random()*60); // bua til sek
-			Date d = new Date(117, m, d, h, mi, s);
+			Date d = new Date(117, m, k, h, mi, s);
 			dateList.add(d);
->>>>>>> origin/master
+		}
 		
 		//bua til random flight list
 		for(int i = 0; i<1000; i++ ){
@@ -49,6 +48,7 @@ public class FlightStorage {
 		
 		
 	}
+	
 	
 	
 	public ArrayList<Flight> getList(){
