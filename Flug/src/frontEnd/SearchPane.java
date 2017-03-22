@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import com.toedter.calendar.JDateChooser;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 
 public class SearchPane extends JFrame {
@@ -88,6 +89,7 @@ public class SearchPane extends JFrame {
 		JButton btnSearch = new JButton("Search!");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+			
 				SearchManager.createSearch(origin.getText(), destination.getText(), out.getDate(), in.getDate());
 			}
 		});

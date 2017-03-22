@@ -20,8 +20,10 @@ public class FlightStorage {
 		generateCountries();
 		generateFlights();
 	   //print flights
-		for(int i = 0 ; i<flightList.size(); i++)
-	    	System.out.println(flightList.get(i).getOrigin() + " -> " + flightList.get(i).getDestination());
+		//for(int i = 0 ; i<flightList.size(); i++)
+	    	//System.out.println(flightList.get(i).getOrigin() + " -> " + flightList.get(i).getDestination() + " " + flightList.get(i).getDepartureTime().toString());
+		
+		
 	}
 	
 	//búum til random dagsetningar
@@ -68,7 +70,7 @@ public class FlightStorage {
 	
 	//erum bar aad prenta ut fyrstu 40 i augnablikinu
 	public String getRandomCountry(){
-        int c =  (int)(Math.random()*20); //breytum thetta i 250 seinna
+        int c =  (int)(Math.random()*10); //breytum thetta i 250 seinna
 		return countries[c].getDisplayCountry();
 	}
 	
