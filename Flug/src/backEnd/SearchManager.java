@@ -18,7 +18,7 @@ public class SearchManager {
 	static ArrayList<Flight> departResults;
 	static ArrayList<Flight> returnResults;
 
-	
+	//loksins
 	
 	public static void searchForFlights(SearchInfo search){
 		//flug ut
