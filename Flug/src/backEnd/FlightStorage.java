@@ -42,13 +42,7 @@ public class FlightStorage {
 			
 			flightList.add( new Flight("FB0101", "Wow Air", dateList.get(index), myDate, "KEF", "JFK", true, verd, 30));		
 		}
-		
-		//for(int i = 0; i<1000; i++)
-		//	System.out.println(flightList.get(i).getDepartureTime().toString()+" : " + flightList.get(i).getPrice());
-		
-		
 	}
-	
 	
 	
 	public ArrayList<Flight> getList(){
@@ -62,13 +56,16 @@ public class FlightStorage {
 			int c = 1 + (int)(Math.random()*60);
 			int e = 1 + (int)(Math.random()*24);
 			int m = 1 + (int)(Math.random()*60);
+			@SuppressWarnings("deprecation")
 			Date d = new Date(117, a, b, e, c, m);
 			dateList.add(d);
 		}
+		
+		
+		
 	}
 	
-		
-		
+     		
 		
 		
 		

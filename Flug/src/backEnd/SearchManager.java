@@ -8,7 +8,7 @@ import java.util.Date;
 public class SearchManager {
 	static SearchInfo search;
 	static FlightStorage storage = new FlightStorage();
-	static ArrayList <Flight> flightList = new ArrayList<Flight>(storage.flightList);
+	static ArrayList <Flight> flightList = new ArrayList<Flight>(storage.getList());
 	//breyta seinna
 	Time maximumTravelTime = new Time(0);
 	//veit ekki alveg hvernig vid stofnum Time
@@ -34,6 +34,7 @@ public class SearchManager {
 				departResults.add(flightList.get(i));
 			}
 		}
+		System.out.println(departResults.size());
 		
 		//heimflug
 		returnResults = new ArrayList<Flight>();
@@ -48,9 +49,6 @@ public class SearchManager {
 				returnResults.add(flightList.get(i));
 			}
 		}
-		
-		
-		
 	}
 	
 	public static void increasingPriceOrder(){
@@ -63,8 +61,13 @@ public class SearchManager {
 		Date arrive = new Date(117, 8, 25);
 		search = new SearchInfo("KEF", "JFK", depart, arrive);
 		searchForFlights(search);
+		System.out.println(storage.getList().size());
+				
+		if(departResults.size()==0)
+			System.out.println("Engin flug ut");
+		
 		for(int i =0; i< departResults.size(); i++){
-			System.out.println(departResults.get(i).departureTime);
+			System.out.println("flug ut " + departResults.get(i).departureTime);
 		}
 		
 		if(returnResults.size()==0){
