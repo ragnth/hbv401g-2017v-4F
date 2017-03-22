@@ -3,6 +3,7 @@ package backEnd;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Random;
 
 public class FlightStorage {
@@ -11,16 +12,16 @@ public class FlightStorage {
 	static
 	ArrayList <Date> dateList = new ArrayList<Date>();
 	private static Random randomGenerator = new Random();
+	String[] locales = Locale.getISOCountries();
+	Locale[] countries;
 	
 	public FlightStorage(){
 		generateDates();
+		generateCountries();
 		generateFlights();
-		
-		//prentum út lista
-		//for(int i = 0; i<1000; i++)
-		//	System.out.println(flightList.get(i).getDepartureTime().toString()+" : " + flightList.get(i).getPrice());
-		
-		
+	   //print flights
+		//for(int i = 0 ; i<flightList.size(); i++)
+	    //	System.out.println(flightList.get(i).getOrigin() + " -> " + flightList.get(i).getDestination());
 	}
 	
 	//búum til random dagsetningar
@@ -37,6 +38,17 @@ public class FlightStorage {
 		}	
 	}	
 	
+	public void generateCountries(){
+		countries = new Locale[250];
+		int i=0;
+		for (String countryCode : locales) {			
+			Locale obj = new Locale("", countryCode);
+			countries[i]=obj;
+			i++;
+
+		}
+	}
+	
 	//búum til random flight list
 	public void generateFlights(){
 		for(int i = 0; i<1000; i++ ){
@@ -51,9 +63,15 @@ public class FlightStorage {
 			//bua til random verd
 			int verd = 8000 + (int)(Math.random()*100000);
 			
-			flightList.add( new Flight("FB0101", "Wow Air", dateList.get(index), myDate, "KEF", "JFK", true, verd, 30));		
+			//random country
+            int c1 =  (int)(Math.random()*250); //from
+            int c2 =  (int)(Math.random()*250); //to
+
+			flightList.add( new Flight("FB0101", "Wow Air", dateList.get(index), myDate, countries[c1].getDisplayCountry(), countries[c2].getDisplayCountry(), true, verd, 30));		
 		}
 	}
+	
+	
 	
 	public ArrayList<Flight> getList(){
 		return flightList;

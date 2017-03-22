@@ -4,6 +4,7 @@ import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class SearchManager {
 	static SearchInfo search;
@@ -12,17 +13,15 @@ public class SearchManager {
 	
 	//breyta seinna
 	Time maximumTravelTime = new Time(0);
-	//veit ekki alveg hvernig vid stofnum Time
 	Boolean maxOneStop = false;
 	Boolean directFlight = false;
 	Boolean excludeOvernightFlights = false;
 	static ArrayList<Flight> departResults;
 	static ArrayList<Flight> returnResults;
 
-	//loksins
 	
 	public static void searchForFlights(SearchInfo search){
-		//flug ut
+		//Flug ut
 		departResults = new ArrayList<Flight>();
 		Calendar cal1 = Calendar.getInstance();
 		cal1.setTime(search.getDepartureDate()); //
@@ -36,7 +35,7 @@ public class SearchManager {
 			}
 		}
 		
-		//heimflug
+		//Heimflug
 		returnResults = new ArrayList<Flight>();
 		cal1 = Calendar.getInstance();
 		cal1.setTime(search.getReturnDate()); //
@@ -50,6 +49,7 @@ public class SearchManager {
 			}
 		}
 	}
+	
 	
 	public static void increasingPriceOrder(){
 		//quicksort a flightList[i].getPrice()
@@ -80,7 +80,12 @@ public class SearchManager {
 		for(int i =0; i< returnResults.size(); i++){
 			System.out.println("Return flight: " + returnResults.get(i).departureTime);
 		}
+		
+		
+		
+		
 	}
+	
 	
 	
 	
