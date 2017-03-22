@@ -7,8 +7,8 @@ import java.util.Date;
 
 public class SearchManager {
 	static SearchInfo search;
-	static FlightStorage storage = new FlightStorage();
-	static ArrayList <Flight> flightList = new ArrayList<Flight>(storage.getList());
+	 static FlightStorage storage = new FlightStorage();
+	static ArrayList <Flight> flightList = new ArrayList<Flight>();
 	//breyta seinna
 	Time maximumTravelTime = new Time(0);
 	//veit ekki alveg hvernig vid stofnum Time
