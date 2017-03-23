@@ -71,29 +71,44 @@ public class SearchPane extends JFrame {
 		destination.setColumns(10);
 		
 		JDateChooser out = new JDateChooser();
-		out.setBounds(76, 179, 119, 26);
+		out.setBounds(66, 141, 119, 26);
 		contentPane.add(out);
 		
 		JDateChooser in = new JDateChooser();
-		in.setBounds(259, 179, 119, 26);
+		in.setBounds(263, 141, 119, 26);
 		contentPane.add(in);
 		
 		JLabel lblLeavingOn = new JLabel("Leaving on");
-		lblLeavingOn.setBounds(93, 151, 103, 16);
+		lblLeavingOn.setBounds(92, 113, 103, 16);
 		contentPane.add(lblLeavingOn);
 		
 		JLabel lblReturningOn = new JLabel("Returning on");
-		lblReturningOn.setBounds(282, 151, 92, 16);
+		lblReturningOn.setBounds(275, 113, 92, 16);
 		contentPane.add(lblReturningOn);
+		
+		JLabel warning = new JLabel("Please select a return date later than the outgoing date");
+		warning.setBounds(92, 197, 264, 16);
+		contentPane.add(warning);
+		warning.setVisible(false);
 		
 		JButton btnSearch = new JButton("Search!");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				warning.setVisible(false);
+				Date date = new Date(); // get date today
+				if(!in.getDate().before(out.getDate()) && out.getDate().after(date) || out.getDate().equals(date)){
+					SearchManager.createSearch(origin.getText(), destination.getText(), out.getDate(), in.getDate());
+				}
+				else{
+					warning.setVisible(true);
+				}
 			
-				SearchManager.createSearch(origin.getText(), destination.getText(), out.getDate(), in.getDate());
+				
 			}
 		});
 		btnSearch.setBounds(168, 225, 117, 29);
 		contentPane.add(btnSearch);
+		
+		
 	}
 }

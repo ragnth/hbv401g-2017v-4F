@@ -21,7 +21,7 @@ public class SearchManager {
 	public static void createSearch(String origin, String destination, Date in, Date out){
 		search = new SearchInfo(origin, destination, in, out);
 		//display search
-		System.out.println("My search: ." + search.getOrigin() + ". to ." + search.getDestination() + ". " + search.getDepartureDate());
+		System.out.println("My search: " + search.getOrigin() + " to " + search.getDestination() + " " + search.getDepartureDate());
 
 		searchForFlights(search);
 		if(departResults.size()==0)
