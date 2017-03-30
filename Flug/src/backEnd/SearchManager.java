@@ -56,6 +56,7 @@ public class SearchManager {
 				cal2.setTime(flightList.get(i).getDepartureTime());
 				boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
 				                  cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+	
 				
 				if(sameDay){
 					departResults.add(flightList.get(i));
