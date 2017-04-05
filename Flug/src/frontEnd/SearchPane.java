@@ -10,7 +10,6 @@ import com.toedter.components.JLocaleChooser;
 
 import backEnd.InvalidSearchException;
 import backEnd.SearchManager;
-import backEnd.SearchManagerTest;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -26,7 +25,7 @@ public class SearchPane extends JFrame {
 	private JTextField origin;
 	private JLabel lblDestination;
 	private JTextField destination;
-	private SearchManagerTest controller;
+	private SearchManager controller;
 
 	/**
 	 * Launch the application.
@@ -93,14 +92,11 @@ public class SearchPane extends JFrame {
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try{
-					controller = new SearchManagerTest(origin.getText(), destination.getText(), out.getDate(), in.getDate(), 3, true);
+					controller = new SearchManager(origin.getText(), destination.getText(), out.getDate(), in.getDate(), 3, true);
 				}
 				catch (InvalidSearchException e1){
 					System.out.println("Input error!");
 				}
-			
-				
-			
 				
 			}
 		});

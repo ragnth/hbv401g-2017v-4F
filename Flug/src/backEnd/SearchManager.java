@@ -1,89 +1,92 @@
 package backEnd;
 
-import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
 public class SearchManager {
-	static SearchInfo search;
-	 static FlightStorage storage = new FlightStorage(); //tilvik af FlightStorage
-	static ArrayList <Flight> flightList = new ArrayList<Flight>(storage.getList()); //saekjum listan
-	
-	//breyta seinna
-	Time maximumTravelTime = new Time(0);
-	Boolean maxOneStop = false;
-	Boolean directFlight = false;
-	Boolean excludeOvernightFlights = false;
-	static ArrayList<Flight> departResults;
-	static ArrayList<Flight> returnResults;
-    
-	public static void createSearch(String origin, String destination, Date in, Date out){
-		search = new SearchInfo(origin, destination, in, out);
-		//display search
-		System.out.println("My search: " + search.getOrigin() + " to " + search.getDestination() + " " + search.getDepartureDate());
+	private FlightStorage mockObject; //mock object 
+	private ArrayList<Flight> departResults;
+	private ArrayList<Flight> returnResults;
+	SearchInfo search;
+	Date today = Calendar.getInstance().getTime();
 
-		searchForFlights(search);
-		if(departResults.size()==0)
-			System.out.println("No outbound flights match this date!");
-		
-		for(int i =0; i< departResults.size(); i++){
-			System.out.println("Outbound flight: From " + departResults.get(i).getOrigin() + " to  " + departResults.get(i).getDestination() + " " +  departResults.get(i).departureTime);
+	public SearchManager(String origin, String destination, 
+			Date departureDate, Date returnDate, int passengers, Boolean roundTrip) 
+					throws InvalidSearchException{
+		if(!origin.equals(destination) && departureDate.after(today) && 
+				passengers>0 && departureDate.before(returnDate)){
+			
+			//The search process
+			search = new SearchInfo(origin, destination, departureDate, returnDate, passengers, roundTrip);
+			mockObject = new FlightStorage();
+			departResults = new ArrayList<Flight>(searchOutgoingFlights(search));
+			if(search.getRoundTrip())
+				returnResults = new ArrayList<Flight>(searchReturnFlights(search));
+			
+			// CHECK RESULTS
+			if(departResults.size()==0)
+				System.out.println("No outbound flights match this date!");
+			
+			for(int i =0; i< departResults.size(); i++){
+				System.out.println("Outbound flight: From " + departResults.get(i).getOrigin() + " to  " + departResults.get(i).getDestination() + " " +  departResults.get(i).departureTime);
+			}
+			
+			
+			//ef engin flug heim
+			if(returnResults.size()==0){
+				System.out.println("No return flights match this date!");
+			}
+			
+			for(int i =0; i< returnResults.size(); i++){
+				System.out.println("Return flight: From " + returnResults.get(i).getOrigin() + " to  " + returnResults.get(i).getDestination() + " " +  returnResults.get(i).departureTime);
+			}
+			
+			
+			
 		}
-		
-		
-		//ef engin flug heim
-		if(returnResults.size()==0){
-			System.out.println("No return flights match this date!");
-		}
-		
-		for(int i =0; i< returnResults.size(); i++){
-			System.out.println("Return flight: From " + returnResults.get(i).getOrigin() + " to  " + returnResults.get(i).getDestination() + " " +  returnResults.get(i).departureTime);
-		}
+		else{
+			throw new InvalidSearchException("Invalid search");
+		}		
 	}
-	
-	public static void searchForFlights(SearchInfo search){
-		//Flug ut
-		departResults = new ArrayList<Flight>();
-		
-		Calendar cal1 = Calendar.getInstance();
-		cal1.setTime(search.getDepartureDate()); //
-		for(int i = 0; i<flightList.size(); i++){
-			//if countries match search for dates
-			if(search.getOrigin().equals(flightList.get(i).getOrigin()) && search.getDestination().equals(flightList.get(i).getDestination())) {
 
-				Calendar cal2 = Calendar.getInstance();
-				cal2.setTime(flightList.get(i).getDepartureTime());
-				boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
-				                  cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
-	
-				
-				if(sameDay){
-					departResults.add(flightList.get(i));
-			    }
+	public ArrayList<Flight> searchOutgoingFlights(SearchInfo search){
+		ArrayList<Flight> tempList = new ArrayList<Flight>(); 
+		for(int i = 0; i<mockObject.flightList.size(); i++){
+			//if countries match search for dates
+			if(search.getOrigin().equals(mockObject.flightList.get(i).getOrigin()) && search.getDestination().equals(mockObject.flightList.get(i).getDestination())) {		
+				if(compareDates(search.getDepartureDate(), mockObject.flightList.get(i).getDepartureTime()))
+					tempList.add(mockObject.flightList.get(i));
 		      }
 		}
+		return tempList;
+	}
 		
-		//Heimflug
+	public ArrayList<Flight> searchReturnFlights(SearchInfo search){
+		ArrayList<Flight> tempList = new ArrayList<Flight>(); 
+		
 		returnResults = new ArrayList<Flight>();
-		cal1 = Calendar.getInstance();
-		cal1.setTime(search.getReturnDate()); //
-		for(int i = 0; i<flightList.size(); i++){
-			if(search.getDestination().equals(flightList.get(i).getOrigin())  && search.getOrigin().equals(flightList.get(i).getDestination())){
-				Calendar cal2 = Calendar.getInstance();
-				cal2.setTime(flightList.get(i).getDepartureTime());
-				boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
-				                  cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
-				if(sameDay){
-					returnResults.add(flightList.get(i));
-				}
+		for(int i = 0; i<mockObject.flightList.size(); i++){
+			if(search.getDestination().equals(mockObject.flightList.get(i).getOrigin())  && search.getOrigin().equals(mockObject.flightList.get(i).getDestination())){
+				if(compareDates(search.getReturnDate(), mockObject.flightList.get(i).getDepartureTime()))
+					tempList.add(mockObject.flightList.get(i));
 			}
 		}
+		return tempList;
 	}
-	
 	
 	public static void increasingPriceOrder(){
-		//quicksort a flightList[i].getPrice()
+		//sorts flightResults, returns nothing
 	}
 	
+	public Boolean compareDates(Date d1, Date d2){
+		Calendar cal1 = Calendar.getInstance();
+		cal1.setTime(d1); //
+		Calendar cal2 = Calendar.getInstance();
+		cal2.setTime(d2);
+		boolean sameDay = cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+		                  cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+	
+		return sameDay;
+	}
 }
