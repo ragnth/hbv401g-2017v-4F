@@ -8,7 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import com.toedter.components.JLocaleChooser;
 
+import backEnd.InvalidSearchException;
 import backEnd.SearchManager;
+import backEnd.SearchManagerTest;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -24,6 +26,7 @@ public class SearchPane extends JFrame {
 	private JTextField origin;
 	private JLabel lblDestination;
 	private JTextField destination;
+	private SearchManagerTest controller;
 
 	/**
 	 * Launch the application.
@@ -86,22 +89,17 @@ public class SearchPane extends JFrame {
 		lblReturningOn.setBounds(275, 113, 92, 16);
 		contentPane.add(lblReturningOn);
 		
-		JLabel warning = new JLabel("Please select a return date later than the outgoing date");
-		warning.setBounds(92, 197, 264, 16);
-		contentPane.add(warning);
-		warning.setVisible(false);
-		
 		JButton btnSearch = new JButton("Search!");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				warning.setVisible(false);
-				Date date = new Date(); // get date today
-				if(!in.getDate().before(out.getDate()) && out.getDate().after(date) || out.getDate().equals(date)){
-					SearchManager.createSearch(origin.getText(), destination.getText(), out.getDate(), in.getDate());
+				try{
+					controller = new SearchManagerTest(origin.getText(), destination.getText(), out.getDate(), in.getDate(), 3, true);
 				}
-				else{
-					warning.setVisible(true);
+				catch (InvalidSearchException e1){
+					System.out.println("Input error!");
 				}
+			
+				
 			
 				
 			}

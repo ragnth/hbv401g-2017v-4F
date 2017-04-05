@@ -8,7 +8,7 @@ import java.util.Random;
 
 public class FlightStorage {
 
-	static ArrayList <Flight> flightList = new ArrayList<Flight>();
+	public ArrayList <Flight> flightList = new ArrayList<Flight>();
 	static
 	ArrayList <Date> dateList = new ArrayList<Date>();
 	private static Random randomGenerator = new Random();
