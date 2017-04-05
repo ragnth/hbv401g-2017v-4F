@@ -2,13 +2,16 @@ package backEnd;
 
 import java.util.ArrayList;
 import org.joda.time.DateTime;
+
+import backEnd.FlightStorage;
+
 import java.util.Calendar;
 import java.util.Date;
 
 public class SearchManager {
 	private FlightStorage mockObject; //mock object 
-	private ArrayList<Flight> departResults;
-	private ArrayList<Flight> returnResults;
+	private ArrayList<Trip> departResults;
+	private ArrayList<Trip> returnResults;
 	SearchInfo search;
 	
 
@@ -21,36 +24,19 @@ public class SearchManager {
 			//The search process
 			search = new SearchInfo(origin, destination, departureDate, returnDate, passengers, roundTrip);
 			mockObject = new FlightStorage();
-			departResults = new ArrayList<Flight>(searchOutgoingFlights(search));
-			searchTrips(search.getOrigin(), search.getDestination(), search.getDepartureDate());
+			departResults = new ArrayList<Trip>();
+			returnResults = new ArrayList<Trip>();
+			System.out.println("search manager");
+			//Find outbound trips
+			departResults.addAll(searchTrips(search.getOrigin(), search.getDestination(), search.getDepartureDate()));
+			departResults.addAll(searchDirect(search.getOrigin(), search.getDestination(), search.getDepartureDate()));
 			
+			//Find return trips 
 			if(search.getRoundTrip()){
-			//	returnResults = new ArrayList<Flight>(searchReturnFlights(search));
-				searchTrips(search.getDestination(), search.getOrigin(), search.getReturnDate());
-				//Return trips
+				returnResults.addAll(searchTrips(search.getDestination(), search.getOrigin(), search.getReturnDate()));
+				returnResults.addAll(searchTrips(search.getDestination(), search.getOrigin(), search.getReturnDate()));
+
 			}
-			
-			
-			//**********************************************************************
-			// CHECK RESULTS
-			if(departResults.size()==0)
-				System.out.println("No outbound flights match this date!");
-			
-			for(int i =0; i< departResults.size(); i++){
-				System.out.println("Outbound flight: From " + departResults.get(i).getOrigin() + " to  " + departResults.get(i).getDestination() + " " +  departResults.get(i).departureTime);
-			}
-			
-			
-			//ef engin flug heim
-			if(returnResults.size()==0){
-				System.out.println("No return flights match this date!");
-			}
-			
-			for(int i =0; i< returnResults.size(); i++){
-				System.out.println("Return flight: From " + returnResults.get(i).getOrigin() + " to  " + returnResults.get(i).getDestination() + " " +  returnResults.get(i).departureTime);
-			}
-			
-			//*******************************************************************
 			
 		}
 		else{
@@ -58,23 +44,13 @@ public class SearchManager {
 		}		
 	}
 
-	public ArrayList<Flight> searchOutgoingFlights(SearchInfo search){
-		ArrayList<Flight> tempList = new ArrayList<Flight>(); 
-		for(int i = 0; i<mockObject.flightList.size(); i++){
-			//if countries match search for dates
-			if(search.getOrigin().equals(mockObject.flightList.get(i).getOrigin()) && search.getDestination().equals(mockObject.flightList.get(i).getDestination())) {		
-				if(compareDates(search.getDepartureDate(), mockObject.flightList.get(i).getDepartureTime()))
-					tempList.add(mockObject.flightList.get(i));
-		      }
-		}
-		return tempList;
-	}
+
 		
-	public ArrayList<Flight> searchDirect(String from, String to, Date date){
-		ArrayList<Flight> tempList = new ArrayList<Flight>(); 
+	public ArrayList<Trip> searchDirect(String from, String to, Date date){
+		ArrayList<Trip> tempList = new ArrayList<Trip>(); 
 		for(Flight temp: mockObject.flightList){
 			if(temp.getOrigin().equals(from)  && temp.getDestination().equals(to) && compareDates(temp.getDepartureTime(), date))
-					tempList.add(temp);
+					tempList.add(new Trip(temp));
 			}
 		return tempList;
 		}
@@ -87,13 +63,8 @@ public class SearchManager {
 			if(temp.getOrigin().equals(from) && compareDates(temp.getDepartureTime(), date)){
 				for(Flight temp2: mockObject.flightList){
 					if(temp2.getOrigin().equals(temp.getDestination()) && temp2.getDestination().equals(to) && isStopoverPossible(temp.getArrivalTime(), temp2.getDepartureTime()) ){
-						// && 
 						// Found trip that fits, add to list
 						tripList.add(new Trip(temp, temp2));
-						System.out.println("Depart " + temp.getDepartureTime() + " Arrival " + temp2.getArrivalTime());
-						System.out.println("First flight: " + temp.getOrigin() + " to " + temp.getDestination());
-						System.out.println("Second flight: " + temp2.getOrigin() + " to " + temp2.getDestination());
-
 					}
 				}
 			}
@@ -104,14 +75,6 @@ public class SearchManager {
 		return tripList;
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	

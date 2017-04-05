@@ -54,45 +54,44 @@ public class SearchPanel extends JFrame {
 	 */
 	public SearchPanel() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1000, 800);
+		setBounds(100, 100, 1000, 650);
 		contentPanel = new JPanel();
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPanel.setBackground(background);
 		setContentPane(contentPanel);
 		contentPanel.setLayout(null);
-		
+		setResizable(false);
 		origin = new JTextField();
-		origin.setBounds(158, 588, 130, 26);
+		origin.setBounds(147, 455, 130, 26);
 		contentPanel.add(origin);
 		origin.setColumns(10);
-		
 		JLabel lblOrigin = new JLabel("Origin");
-		lblOrigin.setBounds(193, 572, 61, 16);
+		lblOrigin.setBounds(189, 427, 61, 16);
 		contentPanel.add(lblOrigin);
 		
 		lblDestination = new JLabel("Destination");
-		lblDestination.setBounds(357, 560, 92, 16);
+		lblDestination.setBounds(343, 427, 92, 16);
 		contentPanel.add(lblDestination);
 		
 		destination = new JTextField();
-		destination.setBounds(343, 588, 130, 26);
+		destination.setBounds(317, 455, 130, 26);
 		contentPanel.add(destination);
 		destination.setColumns(10);
 		
 		JDateChooser out = new JDateChooser();
-		out.setBounds(523, 588, 119, 26);
+		out.setBounds(514, 455, 119, 26);
 		contentPanel.add(out);
 		
 		JDateChooser in = new JDateChooser();
-		in.setBounds(690, 588, 119, 26);
+		in.setBounds(658, 455, 119, 26);
 		contentPanel.add(in);
 		
 		JLabel lblLeavingOn = new JLabel("Leaving on");
-		lblLeavingOn.setBounds(523, 560, 103, 16);
+		lblLeavingOn.setBounds(536, 427, 103, 16);
 		contentPanel.add(lblLeavingOn);
 		
 		JLabel lblReturningOn = new JLabel("Returning on");
-		lblReturningOn.setBounds(702, 560, 92, 16);
+		lblReturningOn.setBounds(675, 427, 92, 16);
 		contentPanel.add(lblReturningOn);
 		
 		JButton btnSearch = new JButton("Search!");
@@ -107,7 +106,7 @@ public class SearchPanel extends JFrame {
 				
 			}
 		});
-		btnSearch.setBounds(418, 643, 117, 29);
+		btnSearch.setBounds(416, 549, 117, 29);
 		contentPanel.add(btnSearch);
 		
 		JLabel logo = new JLabel("");
