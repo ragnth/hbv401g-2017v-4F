@@ -102,7 +102,7 @@ public class SearchPanel extends JFrame {
 					controller = new SearchManager(origin.getText(), destination.getText(), out.getDate(), in.getDate(), 3, true);
 				}
 				catch (InvalidSearchException e1){
-					System.out.println("Inpu error!");
+					System.out.println("Input error!");
 				}
 				
 			}

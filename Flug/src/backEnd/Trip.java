@@ -13,13 +13,13 @@ public class Trip {
 		this.flightOne = flightOne;
 		this.price = flightOne.getPrice();
 		this.departureTime = flightOne.getDepartureTime();
-		this.arrivalTime = flightOne.getarrivalTime();
+		this.arrivalTime = flightOne.getArrivalTime();
 	}
 	
-	public Trip(Flight first, Flight second){
+	public Trip(Flight flightOne, Flight flightTwo){
 		this.flightOne = flightOne;
 		this.flightTwo = flightTwo;
-		this.price = flightOne.getPrice()+flightTwo.getPrice();
+		this.price = (flightOne.getPrice())+(flightTwo.getPrice());
 		this.departureTime = flightOne.departureTime;
 		this.arrivalTime = flightTwo.arrivalTime;
 	}

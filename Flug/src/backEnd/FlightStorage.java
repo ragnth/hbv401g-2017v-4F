@@ -19,11 +19,7 @@ public class FlightStorage {
 		generateDates();
 		generateCountries();
 		generateFlights();
-	   //print flights
-		//for(int i = 0 ; i<flightList.size(); i++)
-	    	//System.out.println(flightList.get(i).getOrigin() + " -> " + flightList.get(i).getDestination() + " " + flightList.get(i).getDepartureTime().toString());
-		
-		
+	
 	}
 	
 	//búum til random dagsetningar
@@ -52,7 +48,7 @@ public class FlightStorage {
 	
 	//búum til random flight list
 	public void generateFlights(){
-		for(int i = 0; i<500000; i++ ){
+		for(int i = 0; i<3000000; i++ ){
 			int index = randomGenerator.nextInt(dateList.size());
 			
 			//baetir vid 2 klukkutima vid departureTime og setur i arrival time
@@ -70,14 +66,9 @@ public class FlightStorage {
 	
 	//erum bar aad prenta ut fyrstu 40 i augnablikinu
 	public String getRandomCountry(){
-        int c =  (int)(Math.random()*10); //breytum thetta i 250 seinna
+        int c =  (int)(Math.random()*250); 
 		return countries[c].getDisplayCountry();
-	}
-	
-	public ArrayList<Flight> getList(){
-		return flightList;
-	}
-		
+	}		
 }
 
 

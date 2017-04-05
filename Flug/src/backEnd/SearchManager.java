@@ -10,22 +10,23 @@ public class SearchManager {
 	private ArrayList<Flight> departResults;
 	private ArrayList<Flight> returnResults;
 	SearchInfo search;
-	Date today = Calendar.getInstance().getTime();
+	
 
 
 	public SearchManager(String origin, String destination, 
 			Date departureDate, Date returnDate, int passengers, Boolean roundTrip) 
 					throws InvalidSearchException{
-		if(!origin.equals(destination) && departureDate.after(today) && 
+		if(!origin.equals(destination) && departureDate.after(Calendar.getInstance().getTime()) && 
 				passengers>0 && departureDate.before(returnDate)){
 			//The search process
 			search = new SearchInfo(origin, destination, departureDate, returnDate, passengers, roundTrip);
 			mockObject = new FlightStorage();
 			departResults = new ArrayList<Flight>(searchOutgoingFlights(search));
-			//Need to look for outgoing trips
+			searchTrips(search.getOrigin(), search.getDestination(), search.getDepartureDate());
 			
 			if(search.getRoundTrip()){
-				returnResults = new ArrayList<Flight>(searchReturnFlights(search));
+			//	returnResults = new ArrayList<Flight>(searchReturnFlights(search));
+				searchTrips(search.getDestination(), search.getOrigin(), search.getReturnDate());
 				//Return trips
 			}
 			
@@ -69,27 +70,27 @@ public class SearchManager {
 		return tempList;
 	}
 		
-	public ArrayList<Flight> searchReturnFlights(SearchInfo search){
+	public ArrayList<Flight> searchDirect(String from, String to, Date date){
 		ArrayList<Flight> tempList = new ArrayList<Flight>(); 
-		
-		returnResults = new ArrayList<Flight>();
-		for(int i = 0; i<mockObject.flightList.size(); i++){
-			if(search.getDestination().equals(mockObject.flightList.get(i).getOrigin())  && search.getOrigin().equals(mockObject.flightList.get(i).getDestination())){
-				if(compareDates(search.getReturnDate(), mockObject.flightList.get(i).getDepartureTime()))
-					tempList.add(mockObject.flightList.get(i));
+		for(Flight temp: mockObject.flightList){
+			if(temp.getOrigin().equals(from)  && temp.getDestination().equals(to) && compareDates(temp.getDepartureTime(), date))
+					tempList.add(temp);
 			}
-		}
 		return tempList;
-	}
+		}
+		
 	
-	public ArrayList<Trip> searchOutgoingTrips(SearchInfo search){
+	public ArrayList<Trip> searchTrips(String from, String to, Date date){
 		ArrayList<Trip> tripList = new ArrayList<Trip>();
+	
 		for (Flight temp : mockObject.flightList) {
-			if(temp.getOrigin().equals(search.getOrigin()) && compareDates(temp.getDepartureTime(), search.getDepartureDate())){
+			if(temp.getOrigin().equals(from) && compareDates(temp.getDepartureTime(), date)){
 				for(Flight temp2: mockObject.flightList){
-					if(temp2.getOrigin().equals(temp.getDestination()) && temp2.getDestination().equals(search.getDestination()) && isStopoverPossible(temp.getarrivalTime(), temp2.getDepartureTime())){
+					if(temp2.getOrigin().equals(temp.getDestination()) && temp2.getDestination().equals(to) && isStopoverPossible(temp.getArrivalTime(), temp2.getDepartureTime()) ){
+						// && 
 						// Found trip that fits, add to list
 						tripList.add(new Trip(temp, temp2));
+						System.out.println("Depart " + temp.getDepartureTime() + " Arrival " + temp2.getArrivalTime());
 						System.out.println("First flight: " + temp.getOrigin() + " to " + temp.getDestination());
 						System.out.println("Second flight: " + temp2.getOrigin() + " to " + temp2.getDestination());
 
@@ -116,12 +117,13 @@ public class SearchManager {
 	
 	//Input: flight1.arrivalTime, flight2.departureTime
 	public Boolean isStopoverPossible(Date flight1, Date flight2){
+		
 		DateTime dt1 = new DateTime(flight1);
 		DateTime dt2 = new DateTime(flight2);
+
 		//Time in between flights should be more than one hour, but no
 		//more than a whole day
-	    return (dt2.isAfter(dt1.plusHours(1)) && dt1.isAfter(dt2.plusDays(1)));
-		
+	    return (dt2.isAfter(dt1.plusHours(1)) && dt1.plusDays(1).isAfter(dt2));
 	}
 	
 	public static void increasingPriceOrder(){

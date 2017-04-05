@@ -46,7 +46,7 @@ public class Flight {
 		return departureTime;
 	}
 	
-	public Date getarrivalTime(){
+	public Date getArrivalTime(){
 		return departureTime;
 	}	
 
