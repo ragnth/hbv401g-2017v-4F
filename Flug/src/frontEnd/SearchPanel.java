@@ -111,9 +111,9 @@ public class SearchPanel extends JFrame {
 		contentPanel.add(btnSearch);
 		
 		JLabel logo = new JLabel("");
-		logo.setBounds(215, 34, 488, 345);
+		logo.setBounds(189, 51, 730, 330);
 		contentPanel.add(logo);
-		logo.setIcon(new ImageIcon(getClass().getResource("/images/logo1.png")));
+		logo.setIcon(new ImageIcon(getClass().getResource("/images/logo2.png")));
 		logo.setBorder(BorderFactory.createLineBorder(Color.white));
 		
 		JLabel slogan = new JLabel("Find the best flight of your life");
