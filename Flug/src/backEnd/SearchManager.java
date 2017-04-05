@@ -1,6 +1,7 @@
 package backEnd;
 
 import java.util.ArrayList;
+import org.joda.time.DateTime;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -11,19 +12,25 @@ public class SearchManager {
 	SearchInfo search;
 	Date today = Calendar.getInstance().getTime();
 
+
 	public SearchManager(String origin, String destination, 
 			Date departureDate, Date returnDate, int passengers, Boolean roundTrip) 
 					throws InvalidSearchException{
 		if(!origin.equals(destination) && departureDate.after(today) && 
 				passengers>0 && departureDate.before(returnDate)){
-			
 			//The search process
 			search = new SearchInfo(origin, destination, departureDate, returnDate, passengers, roundTrip);
 			mockObject = new FlightStorage();
 			departResults = new ArrayList<Flight>(searchOutgoingFlights(search));
-			if(search.getRoundTrip())
-				returnResults = new ArrayList<Flight>(searchReturnFlights(search));
+			//Need to look for outgoing trips
 			
+			if(search.getRoundTrip()){
+				returnResults = new ArrayList<Flight>(searchReturnFlights(search));
+				//Return trips
+			}
+			
+			
+			//**********************************************************************
 			// CHECK RESULTS
 			if(departResults.size()==0)
 				System.out.println("No outbound flights match this date!");
@@ -42,7 +49,7 @@ public class SearchManager {
 				System.out.println("Return flight: From " + returnResults.get(i).getOrigin() + " to  " + returnResults.get(i).getDestination() + " " +  returnResults.get(i).departureTime);
 			}
 			
-			
+			//*******************************************************************
 			
 		}
 		else{
@@ -73,6 +80,48 @@ public class SearchManager {
 			}
 		}
 		return tempList;
+	}
+	
+	public ArrayList<Trip> searchOutgoingTrips(SearchInfo search){
+		ArrayList<Trip> tripList = new ArrayList<Trip>();
+		for (Flight temp : mockObject.flightList) {
+			if(temp.getOrigin().equals(search.getOrigin()) && compareDates(temp.getDepartureTime(), search.getDepartureDate())){
+				for(Flight temp2: mockObject.flightList){
+					if(temp2.getOrigin().equals(temp.getDestination()) && temp2.getDestination().equals(search.getDestination()) && isStopoverPossible(temp.getarrivalTime(), temp2.getDepartureTime())){
+						// Found trip that fits, add to list
+						tripList.add(new Trip(temp, temp2));
+						System.out.println("First flight: " + temp.getOrigin() + " to " + temp.getDestination());
+						System.out.println("Second flight: " + temp2.getOrigin() + " to " + temp2.getDestination());
+
+					}
+				}
+			}
+		}
+ 		
+		
+		
+		return tripList;
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	//Input: flight1.arrivalTime, flight2.departureTime
+	public Boolean isStopoverPossible(Date flight1, Date flight2){
+		DateTime dt1 = new DateTime(flight1);
+		DateTime dt2 = new DateTime(flight2);
+		//Time in between flights should be more than one hour, but no
+		//more than a whole day
+	    return (dt2.isAfter(dt1.plusHours(1)) && dt1.isAfter(dt2.plusDays(1)));
+		
 	}
 	
 	public static void increasingPriceOrder(){
