@@ -102,7 +102,7 @@ public class SearchPanel extends JFrame {
 					controller = new SearchManager(origin.getText(), destination.getText(), out.getDate(), in.getDate(), 3, true);
 				}
 				catch (InvalidSearchException e1){
-					System.out.println("Inpu error!");
+					System.out.println("Input error!");
 				}
 				
 			}
@@ -111,14 +111,10 @@ public class SearchPanel extends JFrame {
 		contentPanel.add(btnSearch);
 		
 		JLabel logo = new JLabel("");
-		logo.setBounds(189, 51, 730, 330);
+		logo.setBounds(120, 50, 730, 330);
 		contentPanel.add(logo);
 		logo.setIcon(new ImageIcon(getClass().getResource("/images/logo2.png")));
 		logo.setBorder(BorderFactory.createLineBorder(Color.white));
-		
-		JLabel slogan = new JLabel("Find the best flight of your life");
-		slogan.setBounds(158, 464, 208, 59);
-		contentPanel.add(slogan);
 		
 	}
 }

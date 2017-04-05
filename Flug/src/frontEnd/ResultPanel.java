@@ -9,6 +9,9 @@ public class ResultPanel extends JPanel {
 	 */
 	public ResultPanel() {
 
+		
+		
+		
 	}
 
 }
