@@ -19,24 +19,14 @@ public class SearchManager {
 	public SearchManager(String origin, String destination, 
 			Date departureDate, Date returnDate, int passengers, Boolean roundTrip) 
 					throws InvalidSearchException{
+		
 		if(!origin.equals(destination) && departureDate.after(Calendar.getInstance().getTime()) && 
 				passengers>0 && departureDate.before(returnDate)){
+			
+			//SEND SIGNAL to Interface
 			//The search process
 			search = new SearchInfo(origin, destination, departureDate, returnDate, passengers, roundTrip);
-			mockObject = new FlightStorage();
-			departResults = new ArrayList<Trip>();
-			returnResults = new ArrayList<Trip>();
-			System.out.println("search manager");
-			//Find outbound trips
-			departResults.addAll(searchTrips(search.getOrigin(), search.getDestination(), search.getDepartureDate()));
-			departResults.addAll(searchDirect(search.getOrigin(), search.getDestination(), search.getDepartureDate()));
-			
-			//Find return trips 
-			if(search.getRoundTrip()){
-				returnResults.addAll(searchTrips(search.getDestination(), search.getOrigin(), search.getReturnDate()));
-				returnResults.addAll(searchTrips(search.getDestination(), search.getOrigin(), search.getReturnDate()));
 
-			}
 			
 		}
 		else{
@@ -45,7 +35,23 @@ public class SearchManager {
 	}
 
 
+	public void search(){
+		mockObject = new FlightStorage();
+		departResults = new ArrayList<Trip>();
+		returnResults = new ArrayList<Trip>();
+		//Find outbound trips
+		departResults.addAll(searchTrips(search.getOrigin(), search.getDestination(), search.getDepartureDate()));
+		departResults.addAll(searchDirect(search.getOrigin(), search.getDestination(), search.getDepartureDate()));
 		
+		//Find return trips 
+		if(search.getRoundTrip()){
+			returnResults.addAll(searchTrips(search.getDestination(), search.getOrigin(), search.getReturnDate()));
+			returnResults.addAll(searchTrips(search.getDestination(), search.getOrigin(), search.getReturnDate()));
+
+		}
+	}
+	
+	
 	public ArrayList<Trip> searchDirect(String from, String to, Date date){
 		ArrayList<Trip> tempList = new ArrayList<Trip>(); 
 		for(Flight temp: mockObject.flightList){
@@ -70,8 +76,6 @@ public class SearchManager {
 			}
 		}
  		
-		
-		
 		return tripList;
 		
 	}
