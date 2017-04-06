@@ -26,16 +26,16 @@ public class ResultPanel extends JPanel {
 		logo.setBounds(300, 20, 511, 330);
 		
 	   	add(logo);
-		 logo.setIcon(new ImageIcon(getClass().getResource("/images/logoSmall.png")));
+		logo.setIcon(new ImageIcon(getClass().getResource("/images/logoSmall.png")));
 		
-		
-			Icon icon = new ImageIcon(getClass().getResource("/images/giphy.gif"));
-			JLabel loadingGIF = new JLabel(icon);
-			loadingGIF.setBounds(300, 300, 300, 300);
-			add(loadingGIF);
+		/*
+		Icon icon = new ImageIcon(getClass().getResource("/images/giphy.gif"));
+		JLabel loadingGIF = new JLabel(icon);
+		loadingGIF.setBounds(300, 300, 300, 300);
+		add(loadingGIF);
 	
 		
-		
+		*/
 		
 		//logo.setBorder(BorderFactory.createLineBorder(Color.white));
 
