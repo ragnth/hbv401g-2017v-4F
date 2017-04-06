@@ -27,10 +27,6 @@ import java.util.Date;
 import java.awt.event.ActionEvent;
 
 public class InterfaceManager extends JFrame {
-
-	private JTextField origin;
-	private JLabel lblDestination;
-	private JTextField destination;
 	private SearchManager controller;
 	private Color background = new Color(29,216,200);
 	SearchPanel search = new SearchPanel();
@@ -61,17 +57,15 @@ public class InterfaceManager extends JFrame {
 		Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
 		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		setResizable(false);
-
-		//test.setBorder(new EmptyBorder(5,5,5,5));
-		setContentPane(search);
+		add(search);
 		search.btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try{				
 					controller = new SearchManager(search.origin.getText(), search.destination.getText(), search.out.getDate(), search.in.getDate(), 3, true);
-					setContentPane(result);
-					validate();
+					search.setVisible(false);
+					add(result);
+					
 					controller.search();
-
 					
 					
 
