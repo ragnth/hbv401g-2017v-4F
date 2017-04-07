@@ -107,4 +107,18 @@ public class SearchManager {
 	
 		return sameDay;
 	}
+	
+	public ArrayList<Trip> getOutgoingTrips(){
+		return departResults;
+	}
+	
+	public ArrayList<Trip> getReturnTrips(){
+		return returnResults;
+	}
+	
+	
+	
+	
+	
+	
 }

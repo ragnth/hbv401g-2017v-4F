@@ -32,6 +32,9 @@ public class Trip {
 		return flightTwo;
 	}
 	
+	public int getPrice(){
+		return price;
+	}
 	
 	
 
