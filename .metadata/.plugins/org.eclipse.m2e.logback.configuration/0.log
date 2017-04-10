@@ -30,5 +30,9 @@ Agreeing to the Xcode/iOS license requires admin privileges, please run âsu
 
 
 '
+<<<<<<< HEAD
 2017-04-10 10:45:37,693 [Worker-1] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
 2017-04-10 10:56:18,229 [Worker-1] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+=======
+2017-04-10 10:52:52,792 [Worker-0] INFO  c.g.t.t.d.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+>>>>>>> origin/master
