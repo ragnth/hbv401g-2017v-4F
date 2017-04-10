@@ -14,6 +14,7 @@ public class SearchInfo {
 	public SearchInfo(String origin, String destination, Date departureDate, Date returnDate, int passengers, Boolean roundTrip){
 		this.origin = origin;
 		this.destination = destination; 
+
 		this.departureDate = departureDate;
 		this.returnDate = returnDate;
 		//roundTrip

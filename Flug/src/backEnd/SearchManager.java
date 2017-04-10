@@ -19,14 +19,12 @@ public class SearchManager {
 	public SearchManager(String origin, String destination, 
 			Date departureDate, Date returnDate, int passengers, Boolean roundTrip) 
 					throws InvalidSearchException{
-		
-		if(!origin.equals(destination) && departureDate.after(Calendar.getInstance().getTime()) && 
-				passengers>0 && departureDate.before(returnDate)){
+		//LESA MEIRA UM 
+			if( !origin.equals(destination) && departureDate.after(Calendar.getInstance().getTime()) && 
+					passengers>0 && departureDate.before(returnDate) ) {
+				search = new SearchInfo(origin, destination, departureDate, returnDate, passengers, roundTrip);
 			
-			//SEND SIGNAL to Interface
-			//The search process
-			search = new SearchInfo(origin, destination, departureDate, returnDate, passengers, roundTrip);
-
+	
 			
 		}
 		else{
@@ -114,6 +112,10 @@ public class SearchManager {
 	
 	public ArrayList<Trip> getReturnTrips(){
 		return returnResults;
+	}
+	
+	public Boolean getRoundTrip(){
+		return search.getRoundTrip();
 	}
 	
 	

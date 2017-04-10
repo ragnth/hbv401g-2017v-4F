@@ -6,6 +6,10 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 
+import javax.swing.JComboBox;
+
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+
 public class FlightStorage {
 
 	public ArrayList <Flight> flightList = new ArrayList<Flight>();
@@ -13,7 +17,10 @@ public class FlightStorage {
 	ArrayList <Date> dateList = new ArrayList<Date>();
 	private static Random randomGenerator = new Random();
 	String[] locales = Locale.getISOCountries();
-	Locale[] countries;
+	public static Locale[] countries;
+	
+ 	
+   	
 	
 	public FlightStorage(){
 		generateDates();

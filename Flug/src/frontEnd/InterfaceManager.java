@@ -66,10 +66,10 @@ public class InterfaceManager extends JFrame {
 		search.btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try{				
-					controller = new SearchManager(search.origin.getText(), search.destination.getText(), search.out.getDate(), search.in.getDate(), 3, true);
+					controller = new SearchManager(search.getOrigin(), search.getDestination(), search.getOut(), search.getIn(), search.getPassengers(), search.getRoundTrip());
 					controller.search();
 					//get both trips, put in result pane
-					result = new ResultPanel(controller.getOutgoingTrips(), controller.getReturnTrips());
+					result = new ResultPanel(controller.getOutgoingTrips(), controller.getReturnTrips(), controller.getRoundTrip());
 					
 					
 					search.setVisible(false);
@@ -88,20 +88,6 @@ public class InterfaceManager extends JFrame {
 		});
 		
 		
-		//contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-		//contentPanel.setBackground(background);
-		//setContentPane(contentPanel);
-		
-	
-		
-		
-		
-		
-		
-	}
-	
-	
-	public Color getBackground(){
-		return background;
-	}
+			}
+
 }
