@@ -1,0 +1,249 @@
+package frontEnd;
+
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+
+import java.util.ArrayList;
+import java.util.Enumeration;
+
+import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
+
+import backEnd.Trip;
+
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JScrollPane;
+import java.awt.Font;
+import java.awt.GridBagLayout;
+
+public class ResultPanel extends JPanel {
+	private JLabel logo;
+	private JPanel panel1, panel2, panel3, center;
+	private searchPane search = new searchPane();
+	private ArrayList<Trip> outgoingTrips;
+	private ArrayList<Trip> returnTrips;
+	private Boolean roundTrip;
+	private Color background = new Color(49,219,205);
+	private Color inputColor = new Color(155, 237, 231);
+	private JPanel south;
+	public ResultScrollBar bar1;
+	private Trip trip1;
+	private Trip trip2;
+	private int totalPrice;
+	private JPanel tripSelector;
+
+	
+	public ResultPanel(ArrayList<Trip> outgoingTrips, ArrayList<Trip> returnTrips, Boolean roundTrip) {
+		setSize(1000, 800);
+		setBackground(background);
+	   	setLayout(new BorderLayout());
+	   	
+	   	this.outgoingTrips = outgoingTrips;
+	   	this.returnTrips = returnTrips;
+	   	this.roundTrip = roundTrip;
+	   	
+	   	display();
+
+	   	
+	   	if(!outgoingTrips.isEmpty() && (!returnTrips.isEmpty() || !roundTrip)){
+	   		displayResults();
+	   	}
+	   	
+	   	else {
+	   		displayMessage();
+	   	}
+	   	
+
+	   
+	}
+	
+	public void display(){
+		//Logo panel
+	    panel1 = new JPanel();
+	    panel1.setOpaque(false);
+	   	panel1.setPreferredSize(new Dimension(1000, 220));
+	   	panel1.setOpaque(false);
+	   	logo = new JLabel("");
+	   	logo.setIcon(new ImageIcon(getClass().getResource("/images/logoSmall.png")));
+	   	panel1.add(logo);
+	   	add(panel1, BorderLayout.NORTH);
+	   
+	   	panel2 = new JPanel(new BorderLayout());
+	   	panel2.setOpaque(false);
+	   	add(panel2, BorderLayout.CENTER);
+	   	
+	   	panel3 = new JPanel();
+	   	panel3.setOpaque(false);
+	   	panel3.setPreferredSize(new Dimension(100,80));
+	   	panel2.add(panel3, BorderLayout.NORTH);
+	   	search.setPreferredSize(new Dimension(700, 50));
+	   	panel3.add(search);
+	   	
+        center = new JPanel(new GridLayout(2, 0, 0, 20));
+        center.setOpaque(false);
+        panel2.add(center, BorderLayout.CENTER);
+       
+        //Lower Border
+        south = new JPanel();
+        south.setOpaque(false);
+        south.setPreferredSize(new Dimension(1000, 160));
+        add(south, BorderLayout.SOUTH);
+	}
+	
+	public void displayResults(){
+		 
+        ///////////////////****************************************************
+        //Outgoing trip panel
+		JPanel outgoingTripsPanel = new JPanel();
+        outgoingTripsPanel.setOpaque(false);
+        center.add(outgoingTripsPanel);
+        //Title
+        JLabel outgoing = new JLabel("Select an outgoing flight:");
+        outgoing.setForeground(Color.WHITE);
+        outgoing.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        
+        
+        //The pane for the scrollpane
+        JPanel outResults = new JPanel();
+        outResults.setBackground(inputColor);
+       
+        for(Trip trip: outgoingTrips){
+        	outResults.add(new IndividualPanel(trip));
+        }
+     
+        bar1 = new ResultScrollBar(outgoingTrips);
+        
+        //If button is scrollbar is selected, update total price
+        bar1.buttonGroup.addActionListener(new ActionListener() {
+	         public void actionPerformed(ActionEvent e) {
+	            trip1 = bar1.getTrip();
+	            //Update box
+	            displaySelectedTrip(trip1, trip2, totalPrice);
+	            totalPrice = trip1.getPrice()+trip2.getPrice();
+	            
+	         }
+	      });	
+
+        trip1 = bar1.getTrip();
+        outgoingTripsPanel.add(outgoing);
+        outgoingTripsPanel.add(bar1);
+        
+        
+        //////////////*******************************************************************************
+        //Return trip panel
+        if(roundTrip){
+	        JPanel returnTripsPanel = new JPanel();
+	        returnTripsPanel.setOpaque(false);
+	        center.add(returnTripsPanel);
+	     
+	        JLabel returnLabel = new JLabel("Select a return flight:");
+	        returnLabel.setForeground(Color.WHITE);
+	        returnLabel.setFont(new Font("Monospaced", Font.PLAIN, 14));
+	       
+	        if(roundTrip){
+	        	ResultScrollBar bar2 = new ResultScrollBar(returnTrips);
+	        	
+	        	 bar2.buttonGroup.addActionListener(new ActionListener() {
+	    	         public void actionPerformed(ActionEvent e) {
+	    	            trip2 = bar2.getTrip();
+	    	            totalPrice = trip1.getPrice()+trip2.getPrice();
+	    	            //Update box
+	    	            displaySelectedTrip(trip1, trip2, totalPrice);
+	    	            tripSelector.repaint();
+	    	         }
+	    	      });	
+	        	trip2 = bar2.getTrip();
+	        	totalPrice = trip1.getPrice()+trip2.getPrice();
+	        	returnTripsPanel.add(returnLabel);
+	        	returnTripsPanel.add(bar2);
+	        }
+	        
+	       
+
+        }
+        //Display the total price of the first selected flights
+        displaySelectedTrip(trip1, trip2, totalPrice);
+	}
+     
+       // *****Trip Selection
+        public void displaySelectedTrip(Trip t1, Trip t2, int totalPrice){
+	        tripSelector = new JPanel(new BorderLayout());
+	        tripSelector.setBorder(BorderFactory.createLineBorder(Color.black));
+	        tripSelector.setOpaque(false);
+	        tripSelector.setPreferredSize(new Dimension(600, 150));
+	        south.add(tripSelector);
+	        
+	        JPanel pnlBook = new JPanel(new GridBagLayout());
+	        pnlBook.setPreferredSize(new Dimension(150, 100));
+	        pnlBook.setOpaque(false);
+	   
+	        tripSelector.add(pnlBook, BorderLayout.EAST);
+	        JButton book = new JButton("Book flights");
+	        book.setBorder(BorderFactory.createLineBorder(Color.white, 1, true));
+			book.setBackground(new Color(34, 195, 182));
+			book.setPreferredSize(new Dimension(140, 30));
+			book.setUI(new StyledButtonUI());
+			book.setFont(new Font("Monospaced", Font.PLAIN, 10));
+			book.setForeground(Color.white);     
+			pnlBook.add(book);
+			
+	
+			
+			JLabel title = new JLabel("Your selected fligts:");
+			title.setForeground(Color.white);
+			title.setHorizontalAlignment(SwingConstants.CENTER);
+			title.setFont(new Font("Monospaced", Font.PLAIN, 14));
+			title.setVerticalAlignment(SwingConstants.CENTER);
+			tripSelector.add(title, BorderLayout.NORTH);
+	
+			JPanel selectedFlights = new JPanel(new GridLayout(3,0));
+			selectedFlights.setOpaque(false);
+			JLabel flight1 = new JLabel(trip1.getFlightOne().getOrigin() + " -> " + trip1.getFlightOne().getDestination() + " -> " + trip1.getFlightTwo().getDestination());
+			selectedFlights.add(flight1);
+			JLabel flight2 = new JLabel(trip2.getFlightTwo().getDestination() + " <- " + trip2.getFlightTwo().getOrigin() + " <- " + trip2.getFlightOne().getOrigin());
+			selectedFlights.add(flight2);
+			JLabel price = new JLabel("Total price: " + totalPrice);
+			tripSelector.add(selectedFlights, BorderLayout.CENTER);
+			selectedFlights.add(price);
+			System.out.println("HALLO");
+        }
+	
+	
+	public void displayMessage(){
+		 	JPanel message = new JPanel(new BorderLayout());
+		 	message.setOpaque(false);
+	        center.add(message);
+	        JLabel noFlights = new JLabel("No flights match this date!");
+	        noFlights.setFont(new Font("Monospaced", Font.PLAIN, 20));
+	        noFlights.setForeground(Color.white);
+	        noFlights.setHorizontalAlignment(SwingConstants.CENTER);
+	        message.add(noFlights, BorderLayout.CENTER);
+	        
+	        
+
+	       
+	}
+	
+	public String getSelectedButtonText(ButtonGroup buttonGroup) {
+        for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+
+            if (button.isSelected()) {
+            }
+        }
+
+        return null;
+    }
+}

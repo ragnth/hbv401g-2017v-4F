@@ -1,0 +1,47 @@
+package frontEnd;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import backEnd.Trip;
+
+public class ResultScrollBar extends JScrollPane {
+	private Color inputColor = new Color(155, 237, 231);
+	public MyButtonGroup buttonGroup;
+	
+	public ResultScrollBar(ArrayList<Trip> resultList) {
+	
+	    buttonGroup = new MyButtonGroup();
+	   	 JPanel resultPanel = new JPanel();
+	        resultPanel.setBackground(inputColor);
+	        int i = 0;
+	        for(Trip trip: resultList){
+	        	IndividualPanel t = new IndividualPanel(trip);
+	        	resultPanel.add(t);
+	        	buttonGroup.add(t.getButton());	        	
+	        }
+	      
+		
+		
+		setViewportView(resultPanel);
+        setOpaque(false);
+        setBorder(BorderFactory.createLineBorder(Color.pink, 2, true));
+        setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        setPreferredSize(new Dimension(950, 150));
+	       
+	}
+
+	
+}

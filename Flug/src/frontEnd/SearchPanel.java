@@ -34,11 +34,12 @@ import javax.swing.SwingConstants;
 public class SearchPanel extends JPanel {
 	
 	private SearchManager controller;
-	//GUI
 	public JButton btnSearch;
 	private searchPane searchPane;
 	private JLabel logo;
 	private Color background = new Color(49,219,205);
+    private Color btnColor = new Color(34, 195, 182);
+
 	
  
 	public SearchPanel() {
@@ -64,12 +65,14 @@ public class SearchPanel extends JPanel {
 	   	panel2.setOpaque(false);
 	   	add(panel2, BorderLayout.SOUTH);
 	   	
+	   	
 		btnSearch = new JButton("Search!");
 		btnSearch.setPreferredSize(new Dimension(120, 30));
-		btnSearch.setBackground(background);
+		btnSearch.setBackground(btnColor);
 		btnSearch.setForeground(Color.white);
 		btnSearch.setBorder(BorderFactory.createLineBorder(Color.white, 2, true));
 	   	btnSearch.setFont(new Font("Monospaced", Font.PLAIN, 15));
+	   	btnSearch.setUI(new StyledButtonUI());
 
 		panel2.add(btnSearch);
 		
@@ -77,17 +80,27 @@ public class SearchPanel extends JPanel {
 		btnSearch.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				btnSearch.setOpaque(true);
 				btnSearch.setBackground(new Color(80,250,205));
 				setCursor(new Cursor(Cursor.HAND_CURSOR));
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				btnSearch.setBackground(background);
+				btnSearch.setBackground(btnColor);
 				setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
 
 			}
 		});	
+	}
+	
+	public void load(){
+			
+		ImageIcon loading = new ImageIcon(getClass().getResource("/images/ring-alt.gif"));
+		btnSearch.setText(null);
+		btnSearch.setIcon(loading);
+		btnSearch.setPreferredSize(new Dimension(60, 60));
+		btnSearch.setBorder(null);
+		
+
 	}
 	
 	public String getOrigin(){
@@ -95,18 +108,16 @@ public class SearchPanel extends JPanel {
 	}
 	
 	public String getDestination(){
-		if(getRoundTrip()){
-			return searchPane.textDestination.getSelectedItem().toString();
-		}
-		else return null;
+		return searchPane.textDestination.getSelectedItem().toString();
 	}
 	
+	
 	public Date getIn(){
-		return searchPane.in.getDate();
+		return searchPane.returnDate.getDate();
 	}
 	
 	public Date getOut(){
-		return searchPane.out.getDate();
+		return searchPane.departureDate.getDate();
 	}	
 	 
 	public int getPassengers(){

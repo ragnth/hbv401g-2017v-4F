@@ -2,34 +2,27 @@ package frontEnd;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Date;
 import java.util.Locale;
 
-import javax.swing.BorderFactory;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.ImageIcon;
 import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import org.jdesktop.swingx.JXDatePicker;
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-
-import com.toedter.calendar.JDateChooser;
-import java.awt.Font;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-import javax.swing.JComboBox;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-
 public class searchPane extends JPanel {
  	JComboBox textOrigin;
 	JComboBox textDestination;
 	JComboBox passengers;
-	JXDatePicker out;
-	JXDatePicker in;
+	JXDatePicker departureDate;
+	JXDatePicker returnDate;
 	String[] locales = Locale.getISOCountries();
 	Locale[] countries;
    	Integer[] pass = {1,2,3,4,5,6,7,8,9};
@@ -85,52 +78,48 @@ public class searchPane extends JPanel {
 	   	
 	   	
 	   	roundTrip = new JCheckBox();
-	   	roundTrip.addActionListener(new ActionListener() {
-	   		public void actionPerformed(ActionEvent e) {
-	   			if(!roundTrip.isSelected()){
-	   				textDestination.setSelectedIndex(-1);
-	   				textDestination.setEnabled(false);
-	   				in.setDate(null);
-	   				in.setEnabled(false);
-	   				
-	   			}
-	   			if(roundTrip.isSelected()){
-	   				textDestination.setEnabled(true);
-	   				in.setEnabled(true);
-	   			}
-	   		}
-	   	});
 	   	roundTrip.setHorizontalAlignment(SwingConstants.RIGHT);
 	   	roundTrip.setSelected(true);
 	   	roundTrip.setBackground(inputColor);
 	   	
 	   	add(roundTrip);
+	   	roundTrip.addActionListener(new ActionListener() {
+	   		public void actionPerformed(ActionEvent e) {
+	   			if(!roundTrip.isSelected()){
+	   				returnDate.setDate(null);
+	   				returnDate.setEnabled(false);
+	   				
+	   			}
+	   			if(roundTrip.isSelected()){
+	   				returnDate.setEnabled(true);
+	   			}
+	   		}
+	   	});
+	   	
 	   	
 	   	
 	   	textOrigin = new JComboBox(locales);
 	   	textOrigin.setFont(new Font("Monospaced", Font.PLAIN, 13));
 		textOrigin.getEditor().getEditorComponent().setBackground(inputColor);
-		textOrigin.setSelectedIndex(-1);
+		textOrigin.setSelectedItem("Iceland");
 		AutoCompleteDecorator.decorate(textOrigin);
 		add(textOrigin);
 	   	
 	   	textDestination = new JComboBox(locales);
 	   	textDestination.setFont(new Font("Monospaced", Font.PLAIN, 13));
 		textDestination.getEditor().getEditorComponent().setBackground(inputColor);
-		textDestination.setSelectedIndex(-1);
+		textDestination.setSelectedItem("Where to?");
 		AutoCompleteDecorator.decorate(textDestination);
 	   	add(textDestination);
 
-	   	out = new JXDatePicker();
-	   	out.getEditor().setBackground(inputColor);
-	   	add(out);
+	   	departureDate = new JXDatePicker();
+	   	departureDate.getEditor().setBackground(inputColor);
+	   	add(departureDate);
 	   	
-	   	in = new JXDatePicker();
-	   	in.getEditor().setBackground(inputColor);
-	   	add(in);
+	   	returnDate = new JXDatePicker();
+	   	returnDate.getEditor().setBackground(inputColor);
+	   	add(returnDate);
 	   	
-
-
 	   	passengers = new JComboBox(pass);
 	   	passengers.setFont(new Font("Monospaced", Font.PLAIN, 13));
 	   	passengers.getEditor().getEditorComponent().setBackground(inputColor);
@@ -150,5 +139,20 @@ public class searchPane extends JPanel {
 			i++;
 		}
 	}
-
+	
+	public void setOrigin(String origin){
+		textOrigin.setSelectedItem(origin);
+	}
+	
+	public void setDestination(String destination){
+		textDestination.setSelectedItem(destination);
+	}
+	
+	public void setDepartureDate(Date date){
+		departureDate.setDate(date);
+	}
+	
+	public void setReturnDate(Date date){
+		returnDate.setDate(date);
+	}
 }

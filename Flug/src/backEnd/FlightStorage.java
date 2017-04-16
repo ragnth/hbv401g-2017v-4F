@@ -6,10 +6,6 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 
-import javax.swing.JComboBox;
-
-import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
-
 public class FlightStorage {
 
 	public ArrayList <Flight> flightList = new ArrayList<Flight>();
@@ -67,7 +63,8 @@ public class FlightStorage {
 			//bua til random verd
 			int verd = 8000 + (int)(Math.random()*100000);
 		
-			flightList.add( new Flight("FB0101", "Wow Air", dateList.get(index), myDate, getRandomCountry(), getRandomCountry(), true, verd, 30));		
+			flightList.add( new Flight("FB0101", "Wow Air", dateList.get(index), myDate, getRandomCountry(), getRandomCountry(), (Math.random() < 0.5), verd, 30));	
+			
 		}
 	}
 	

@@ -6,26 +6,37 @@ import org.joda.time.DateTime;
 import backEnd.FlightStorage;
 
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 
 public class SearchManager {
 	private FlightStorage mockObject; //mock object 
 	private ArrayList<Trip> departResults;
 	private ArrayList<Trip> returnResults;
-	SearchInfo search;
+	public SearchInfo searchInfo;
 	
 
 
 	public SearchManager(String origin, String destination, 
 			Date departureDate, Date returnDate, int passengers, Boolean roundTrip) 
 					throws InvalidSearchException{
-		//LESA MEIRA UM 
-			if( !origin.equals(destination) && departureDate.after(Calendar.getInstance().getTime()) && 
-					passengers>0 && departureDate.before(returnDate) ) {
-				search = new SearchInfo(origin, destination, departureDate, returnDate, passengers, roundTrip);
+			if( !origin.equals(destination) && departureDate!=null && returnDate!= null && departureDate.after(Calendar.getInstance().getTime()) && 
+					passengers>0 && departureDate.before(returnDate)) {
+				searchInfo = new SearchInfo(origin, destination, departureDate, returnDate, passengers, roundTrip);		
+		}
+		else{
+			throw new InvalidSearchException("Invalid search");
+		}		
 			
+			
+	}
 	
-			
+	public SearchManager(String origin, String destination, Date departureDate, int passengers, Boolean roundTrip) 
+					throws InvalidSearchException{
+			if(!origin.equals(destination) && departureDate!=null&& departureDate.after(Calendar.getInstance().getTime()) && 
+					passengers>0) {
+				 searchInfo = new SearchInfo(origin, destination, departureDate, passengers, roundTrip);			
 		}
 		else{
 			throw new InvalidSearchException("Invalid search");
@@ -38,15 +49,18 @@ public class SearchManager {
 		departResults = new ArrayList<Trip>();
 		returnResults = new ArrayList<Trip>();
 		//Find outbound trips
-		departResults.addAll(searchTrips(search.getOrigin(), search.getDestination(), search.getDepartureDate()));
-		departResults.addAll(searchDirect(search.getOrigin(), search.getDestination(), search.getDepartureDate()));
+		departResults.addAll(searchTrips(searchInfo.getOrigin(), searchInfo.getDestination(), searchInfo.getDepartureDate()));
+		departResults.addAll(searchDirect(searchInfo.getOrigin(), searchInfo.getDestination(), searchInfo.getDepartureDate()));
+		
 		
 		//Find return trips 
-		if(search.getRoundTrip()){
-			returnResults.addAll(searchTrips(search.getDestination(), search.getOrigin(), search.getReturnDate()));
-			returnResults.addAll(searchTrips(search.getDestination(), search.getOrigin(), search.getReturnDate()));
+		if(searchInfo.getRoundTrip()){
+			returnResults.addAll(searchTrips(searchInfo.getDestination(), searchInfo.getOrigin(), searchInfo.getReturnDate()));
+			returnResults.addAll(searchTrips(searchInfo.getDestination(), searchInfo.getOrigin(), searchInfo.getReturnDate()));
 
 		}
+		
+		increasingPriceOrder();
 	}
 	
 	
@@ -91,8 +105,9 @@ public class SearchManager {
 	    return (dt2.isAfter(dt1.plusHours(1)) && dt1.plusDays(1).isAfter(dt2));
 	}
 	
-	public static void increasingPriceOrder(){
-		//sorts flightResults, returns nothing
+	public void increasingPriceOrder(){
+		Collections.sort(departResults, new CustomComparator());
+		Collections.sort(returnResults, new CustomComparator());
 	}
 	
 	public Boolean compareDates(Date d1, Date d2){
@@ -115,11 +130,20 @@ public class SearchManager {
 	}
 	
 	public Boolean getRoundTrip(){
-		return search.getRoundTrip();
+		return searchInfo.getRoundTrip();
 	}
 	
+	public SearchInfo getSearchInfo(){
+		return searchInfo;
+	}
+
 	
-	
+	public class CustomComparator implements Comparator<Trip> {
+	    @Override
+	    public int compare(Trip o1, Trip o2) {
+	        return ((Integer)o1.getPrice()).compareTo((Integer)o2.getPrice());
+	    }
+	}
 	
 	
 	

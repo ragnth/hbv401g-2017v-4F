@@ -1,0 +1,13 @@
+package backEnd;
+
+public class BookingManager {
+	Trip trip;
+	Passenger passenger;
+	int numberOfPassengers;
+	
+	public BookingManager(Trip trip, Passenger passenger, int numberOfPassengers){
+		this.trip = trip;
+		this.passenger = passenger;
+		this.numberOfPassengers = numberOfPassengers;
+	}
+}

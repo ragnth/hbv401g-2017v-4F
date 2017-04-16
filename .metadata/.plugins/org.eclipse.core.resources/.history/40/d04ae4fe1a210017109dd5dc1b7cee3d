@@ -1,0 +1,173 @@
+package frontEnd;
+
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.SwingConstants;
+
+import backEnd.Trip;
+
+import java.awt.GridLayout;
+import javax.swing.JScrollPane;
+import java.awt.Font;
+
+public class ResultPanel extends JPanel {
+	private JLabel logo;
+	private JPanel panel1, panel2, panel3, center;
+	private searchPane search = new searchPane();
+	private ArrayList<Trip> outgoingTrips;
+	private ArrayList<Trip> returnTrips;
+	private Boolean roundTrip;
+	private Color background = new Color(49,219,205);
+	private Color inputColor = new Color(155, 237, 231);
+	JPanel south;
+
+	
+	public ResultPanel(ArrayList<Trip> outgoingTrips, ArrayList<Trip> returnTrips, Boolean roundTrip) {
+		setSize(1000, 800);
+		setBackground(background);
+	   	setLayout(new BorderLayout());
+	   	
+	   	this.outgoingTrips = outgoingTrips;
+	   	this.returnTrips = returnTrips;
+	   	this.roundTrip = roundTrip;
+	   	
+	   	display();
+
+	   	
+	   	if(!outgoingTrips.isEmpty() && (!returnTrips.isEmpty() || !roundTrip)){
+	   		displayResults();
+	   	}
+	   	
+	   	else {
+	   		displayMessage();
+	   	}
+	   	
+	   
+	}
+	
+	public void display(){
+		//Logo panel
+	    panel1 = new JPanel();
+	    panel1.setOpaque(false);
+	   	panel1.setPreferredSize(new Dimension(1000, 220));
+	   	panel1.setOpaque(false);
+	   	logo = new JLabel("");
+	   	logo.setIcon(new ImageIcon(getClass().getResource("/images/logoSmall.png")));
+	   	panel1.add(logo);
+	   	add(panel1, BorderLayout.NORTH);
+	   
+	   	panel2 = new JPanel(new BorderLayout());
+	   	panel2.setOpaque(false);
+	   	add(panel2, BorderLayout.CENTER);
+	   	
+	   	panel3 = new JPanel();
+	   	panel3.setOpaque(false);
+	   	panel3.setPreferredSize(new Dimension(100,80));
+	   	panel2.add(panel3, BorderLayout.NORTH);
+	   	search.setPreferredSize(new Dimension(700, 50));
+	   	panel3.add(search);
+	   	
+        center = new JPanel(new GridLayout(2, 0, 0, 20));
+        center.setOpaque(false);
+        panel2.add(center, BorderLayout.CENTER);
+       
+        //Lower Border
+        south = new JPanel();
+        south.setOpaque(false);
+        south.setPreferredSize(new Dimension(1000, 160));
+        add(south, BorderLayout.SOUTH);
+	}
+	
+	public void displayResults(){
+		 
+        ///////////////////****************************************************
+        //Outgoing trip panel
+		JPanel outgoingTripsPanel = new JPanel();
+        outgoingTripsPanel.setOpaque(false);
+        center.add(outgoingTripsPanel);
+        //Title
+        JLabel outgoing = new JLabel("Select an outgoing flight:");
+        outgoing.setForeground(Color.WHITE);
+        outgoing.setFont(new Font("Monospaced", Font.PLAIN, 14));
+        
+        
+        //The pane for the scrollpane
+        JPanel outResults = new JPanel();
+        outResults.setBackground(inputColor);
+       
+        for(Trip trip: outgoingTrips){
+        	outResults.add(new IndividualPanel(trip));
+        }
+        
+        ResultScrollBar bar1 = new ResultScrollBar(outgoingTrips);
+
+
+        outgoingTripsPanel.add(outgoing);
+        outgoingTripsPanel.add(bar1);
+        
+        //////////////*******************************************************************************
+        //Return trip panel
+        if(roundTrip){
+	        JPanel returnTripsPanel = new JPanel();
+	        returnTripsPanel.setOpaque(false);
+	        center.add(returnTripsPanel);
+	     
+	        JLabel returnLabel = new JLabel("Select a return flight:");
+	        returnLabel.setForeground(Color.WHITE);
+	        returnLabel.setFont(new Font("Monospaced", Font.PLAIN, 14));
+	
+	       
+	        if(roundTrip){
+	        	ResultScrollBar bar2 = new ResultScrollBar(returnTrips);
+	    
+	        	returnTripsPanel.add(returnLabel);
+	        	returnTripsPanel.add(bar2);
+	        }
+        }
+        
+        //*****Trip Selection
+        JPanel tripSelector = new JPanel(new BorderLayout());
+        tripSelector.setBorder(BorderFactory.createLineBorder(Color.black));
+        tripSelector.setOpaque(false);
+        tripSelector.setPreferredSize(new Dimension(600, 150));
+        south.add(tripSelector);
+        
+        JPanel pnlBook = new JPanel();
+        pnlBook.setOpaque(false);
+        tripSelector.add(pnlBook, BorderLayout.EAST);
+        JButton book = new JButton("Book flights");
+        book.setVerticalAlignment(SwingConstants.CENTER );
+        book.setBorder(BorderFactory.createLineBorder(Color.white, 1, true));
+		book.setBackground(new Color(49,219,205));
+		book.setPreferredSize(new Dimension(70, 25));
+		book.setUI(new StyledButtonUI());
+		book.setFont(new Font("Monospaced", Font.PLAIN, 10));
+		book.setForeground(Color.white);        
+		pnlBook.add(book);
+
+	}
+	
+	public void displayMessage(){
+		 	JPanel message = new JPanel(new BorderLayout());
+		 	message.setOpaque(false);
+	        center.add(message);
+	        JLabel noFlights = new JLabel("No flights match this date!");
+	        noFlights.setFont(new Font("Monospaced", Font.PLAIN, 20));
+	        noFlights.setForeground(Color.white);
+	        noFlights.setHorizontalAlignment(SwingConstants.CENTER);
+	        message.add(noFlights, BorderLayout.CENTER);
+	        
+
+	       
+	}
+}

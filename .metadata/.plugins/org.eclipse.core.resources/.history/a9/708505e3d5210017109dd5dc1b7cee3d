@@ -1,0 +1,67 @@
+package frontEnd;
+
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+
+import javax.swing.BorderFactory;
+import javax.swing.ButtonGroup;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
+import backEnd.Trip;
+
+public class ResultScrollBar extends JScrollPane {
+	private Color inputColor = new Color(155, 237, 231);
+	public MyButtonGroup buttonGroup;
+	private ArrayList<IndividualPanel> panelList;
+	
+	public ResultScrollBar(ArrayList<Trip> resultList) {
+	
+	    buttonGroup = new MyButtonGroup();
+	   	JPanel resultPanel = new JPanel();
+	    resultPanel.setBackground(inputColor);
+	    int i = 0;
+	        for(Trip trip: resultList){
+	        	IndividualPanel t = new IndividualPanel(trip);
+	        	//Add the new Individual Panels to a list
+	        	panelList.add(t);
+	        	//Add the panels to the GUI-scrollbar
+	        	resultPanel.add(t);
+	        	//Have the first flight in the list selected
+	        	if(i==0) t.getButton().setSelected(true);
+	        	//Add the select buttons of each panel to a group
+	        	//so that only one button is selected at a time
+	        	buttonGroup.add(t.getButton());	    
+	        }
+	      
+		
+		
+		setViewportView(resultPanel);
+        setOpaque(false);
+        setBorder(BorderFactory.createLineBorder(Color.pink, 2, true));
+        setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+        setPreferredSize(new Dimension(950, 150));
+	       
+	}
+	
+	
+	//Get the trip of the selected button
+	public Trip getTrip(){
+		for(IndividualPanel k: panelList){
+			if(k.isSelected()){
+				return k.getTrip();
+			}
+		}
+		return null;
+	}
+
+
+	
+}
