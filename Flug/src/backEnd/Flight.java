@@ -47,7 +47,7 @@ public class Flight {
 	}
 	
 	public Date getArrivalTime(){
-		return departureTime;
+		return arrivalTime;
 	}	
 
 	public Boolean getBags(){
