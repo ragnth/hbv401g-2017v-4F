@@ -19,6 +19,7 @@ import backEnd.SearchManager;
 import backEnd.Trip;
 
 import javax.swing.JTextField;
+import javax.swing.SwingWorker;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
@@ -32,6 +33,7 @@ import javax.swing.JComponent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import java.awt.event.ActionEvent;
 
 public class InterfaceManager extends JFrame {
@@ -74,73 +76,101 @@ public class InterfaceManager extends JFrame {
 		this.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
 		setResizable(false);
 		add(search);
-		search.btnSearch.addActionListener(new ActionListener() {
+		search.searchButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				origin = search.getOrigin();
 				destination = search.getDestination();
 				departureDate = search.getIn();
 				returnDate = search.getOut();
-			
-				try{				
-					//Try SearchManager with a round trip
-					if(search.getRoundTrip()){
-						controller = new SearchManager(search.getOrigin(), search.getDestination(), search.getOut(), search.getIn(), search.getPassengers(), search.getRoundTrip());
-					}
-					//Try SearchManager with a one way trip
-					else controller = new SearchManager(search.getOrigin(), search.getDestination(), search.getOut(), search.getPassengers(), search.getRoundTrip());
-					//Call the search function in SearchManager
-					controller.search();
-					//Retrieve results for both trips and construct the result panel
-					result = new ResultPanel(controller.getOutgoingTrips(), controller.getReturnTrips(), controller.getRoundTrip(), controller.getSearchInfo());
-					//
-					search.setVisible(false);
-					add(result);
-					
-					 result.book.addActionListener(new ActionListener() {
-				         public void actionPerformed(ActionEvent e) {
-				           ArrayList<Passenger> passengerList = new ArrayList<Passenger>();
-				           for(int i = 0; i<search.getPassengers(); i++){
-				        	
-				        	 JTextField idNumber = new JTextField();
-				        	 JTextField fullName = new JTextField();
-				        	 final JComponent[] inputs = new JComponent[] {
-				        	         new JLabel("ID number:"),
-				        	         idNumber,
-				        	   
-				        	         new JLabel("Full name:"),
-				        	         fullName
-				        	 };
-				        	 
-					        	 int result = JOptionPane.showConfirmDialog(null, inputs, "Passenger " + (i+1), JOptionPane.PLAIN_MESSAGE);
-					        	 if (result == JOptionPane.OK_OPTION) {
-					        	   
-					        	 } else {
-					        	     System.out.println("User canceled / closed the dialog, result = " + result);
-					        	 }
-					        	 
-					        	passengerList.add(new Passenger(Integer.parseInt(idNumber.getText().toString()), fullName.getText().toString()));
-					            
-					         }
-				         }
-				      });
-					
-			
-				}
-				catch (InvalidSearchException e1){
-					JOptionPane.showMessageDialog(search, "Please select a valid search!", "Invalid search", JOptionPane.WARNING_MESSAGE);
-				}
+				
+				
+				SwingWorker myWorker= new SwingWorker<String, Void>() {
+				    @Override
+				    protected String doInBackground() throws Exception {
+				    	createResultPanel();
+ 				        return null;
+				    }
+				};
+				myWorker.execute();	
+				search.loadButton();
 				
 			}
 		
 		});
 		
 		
-		
-		
-		
 			}
 	
 	
+	public void createResultPanel(){
+		try{				
+			//Try SearchManager with a round trip
+			if(search.getRoundTrip()){
+				controller = new SearchManager(search.getOrigin(), search.getDestination(), search.getOut(), search.getIn(), search.getPassengers(), search.getRoundTrip());
+			}
+			//Try SearchManager with a one way trip
+			else controller = new SearchManager(search.getOrigin(), search.getDestination(), search.getOut(), search.getPassengers(), search.getRoundTrip());
+			
+			controller.search();
+			
+			//Search Manager automatically searches for trips matching input
+			//Retrieve results for both trips and construct the result panel
+			result = new ResultPanel(controller.getOutgoingTrips(), controller.getReturnTrips(), controller.getRoundTrip(), controller.getSearchInfo(), getSearchBar());
+			getContentPane().removeAll();
+	        //search.setVisible(false);
+			add(result);
+			validate();
+			result.btnSearch.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					origin = search.getOrigin();
+					destination = search.getDestination();
+					departureDate = search.getIn();
+					returnDate = search.getOut();
+					
+					createResultPanel();
+					
+				}
+			
+			});
+			 result.book.addActionListener(new ActionListener() {
+		         public void actionPerformed(ActionEvent e) {
+		           ArrayList<Passenger> passengerList = new ArrayList<Passenger>();
+		           for(int i = 0; i<search.getPassengers(); i++){
+		        	
+		        	 JTextField idNumber = new JTextField();
+		        	 JTextField fullName = new JTextField();
+		        	 final JComponent[] inputs = new JComponent[] {
+		        	         new JLabel("ID number:"),
+		        	         idNumber,
+		        	   
+		        	         new JLabel("Full name:"),
+		        	         fullName
+		        	 };
+		        	 
+			        	 int result = JOptionPane.showConfirmDialog(null, inputs, "Passenger " + (i+1), JOptionPane.PLAIN_MESSAGE);
+			        	 if (result == JOptionPane.OK_OPTION) {
+			        	   
+			        	 } else {
+			        	     System.out.println("User canceled / closed the dialog, result = " + result);
+			        	 }
+			        	 
+			        	passengerList.add(new Passenger(Integer.parseInt(idNumber.getText().toString()), fullName.getText().toString()));
+			            
+			         }
+		         }
+		      });
+			
 	
+		}
+		catch (InvalidSearchException e1){
+			JOptionPane.showMessageDialog(search, "Please select a valid search!", "Invalid search", JOptionPane.WARNING_MESSAGE);
+			search.resetButton();
+		}
+	}
+	
+	public searchPane getSearchBar(){
+		return search.getSearchPane();
+	}
+
 
 }

@@ -34,12 +34,13 @@ import javax.swing.SwingConstants;
 public class SearchPanel extends JPanel {
 	
 	private SearchManager controller;
-	public JButton btnSearch;
 	private searchPane searchPane;
 	private JLabel logo;
 	private Color background = new Color(49,219,205);
     private Color btnColor = new Color(34, 195, 182);
-
+    public SearchButton searchButton;
+    JPanel panel, panel2, panel3;
+    private JLabel gif;
 	
  
 	public SearchPanel() {
@@ -53,30 +54,22 @@ public class SearchPanel extends JPanel {
 		logo.setPreferredSize(new Dimension(500, 400));
 		add(logo, BorderLayout.NORTH);
 		
-		JPanel panel = new JPanel(new GridBagLayout());
+		panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
 		add(panel, BorderLayout.CENTER);
 		searchPane = new searchPane();
 		searchPane.setPreferredSize(new Dimension(700, 50));
 		panel.add(searchPane);
 		
-		JPanel panel2 = new JPanel();
+		panel2 = new JPanel();
 	   	panel2.setPreferredSize(new Dimension(120, 280));
 	   	panel2.setOpaque(false);
 	   	add(panel2, BorderLayout.SOUTH);
 	   	
-	   	
-		btnSearch = new JButton("Search!");
-		btnSearch.setPreferredSize(new Dimension(120, 30));
-		btnSearch.setBackground(btnColor);
-		btnSearch.setForeground(Color.white);
-		btnSearch.setBorder(BorderFactory.createLineBorder(Color.white, 2, true));
-	   	btnSearch.setFont(new Font("Monospaced", Font.PLAIN, 15));
-	   	btnSearch.setUI(new StyledButtonUI());
-
-		panel2.add(btnSearch);
+	   	searchButton = new SearchButton(new Dimension(120, 30));
+		panel2.add(searchButton);
 		
-		
+		/*
 		btnSearch.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -90,18 +83,23 @@ public class SearchPanel extends JPanel {
 
 			}
 		});	
+		*/
 	}
 	
-	public void load(){
-			
-		ImageIcon loading = new ImageIcon(getClass().getResource("/images/ring-alt.gif"));
-		btnSearch.setText(null);
-		btnSearch.setIcon(loading);
-		btnSearch.setPreferredSize(new Dimension(60, 60));
-		btnSearch.setBorder(null);
-		
-
+	public void loadButton(){
+		searchButton.setVisible(false);
+		gif = new JLabel();
+		gif.setIcon(new ImageIcon(getClass().getResource("/Images/ring-alt.gif")));
+		panel2.add(gif);
 	}
+	
+	public void resetButton(){
+		searchButton.setVisible(true);
+		gif.setVisible(false);
+		panel2.add(gif);
+	}
+	
+	
 	
 	public String getOrigin(){
 		return searchPane.textOrigin.getSelectedItem().toString();
@@ -126,5 +124,13 @@ public class SearchPanel extends JPanel {
 
 	public Boolean getRoundTrip(){
 		return searchPane.roundTrip.isSelected();
+	}
+	
+	public searchPane getSearchPane(){
+		return searchPane;
+	}
+	
+	public SearchButton getSearchButton(){
+		return searchButton;
 	}
 }

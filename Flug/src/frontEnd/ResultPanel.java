@@ -36,11 +36,9 @@ import java.awt.GridBagLayout;
 public class ResultPanel extends JPanel {
 	private JLabel logo;
 	private JPanel panel1, panel2, panel3, center;
-	public searchPane search = new searchPane();
 	private ArrayList<Trip> outgoingTrips;
 	private ArrayList<Trip> returnTrips;
 	private Boolean roundTrip;
-	private Color background = new Color(49,219,205);
 	private Color inputColor = new Color(155, 237, 231);
 	private JPanel south;
 	public ResultScrollBar bar1;
@@ -51,8 +49,12 @@ public class ResultPanel extends JPanel {
 	private JPanel tripSelector = new JPanel(new BorderLayout());
     public JButton book;
     SearchInfo searchInfo;
+    private Color background = new Color(49,219,205);
+    private Color btnColor = new Color(34, 195, 182);
+    private searchPane searchBar;
+    public SearchButton btnSearch;
 	
-	public ResultPanel(ArrayList<Trip> outgoingTrips, ArrayList<Trip> returnTrips, Boolean roundTrip, SearchInfo searchInfo) {
+	public ResultPanel(ArrayList<Trip> outgoingTrips, ArrayList<Trip> returnTrips, Boolean roundTrip, SearchInfo searchInfo, searchPane searchPane) {
 		setSize(1000, 800);
 		setBackground(background);
 	   	setLayout(new BorderLayout());
@@ -61,6 +63,7 @@ public class ResultPanel extends JPanel {
 	   	this.returnTrips = returnTrips;
 	   	this.roundTrip = roundTrip;
 	   	this.searchInfo = searchInfo;
+	   	this.searchBar = searchPane;
 	   	//Display the return panel
 	   	display();
 
@@ -96,14 +99,13 @@ public class ResultPanel extends JPanel {
 	   	panel3.setOpaque(false);
 	   	panel3.setPreferredSize(new Dimension(100,80));
 	   	panel2.add(panel3, BorderLayout.NORTH);
-	   	search.setPreferredSize(new Dimension(700, 50));
-	   	search.setOrigin(searchInfo.getOrigin());
-	   	search.setDestination(searchInfo.getDestination());
-	   	search.setDepartureDate(searchInfo.getDepartureDate());
-	   	search.setReturnDate(searchInfo.getReturnDate());
-	   	search.setPassengers(searchInfo.getPassengers());
-	   	search.setRoundTrip(searchInfo.getRoundTrip());
-	   	panel3.add(search);
+	   	searchBar.setPreferredSize(new Dimension(700, 50));
+	   	panel3.add(searchBar);
+	  
+	   	
+	   	btnSearch = new SearchButton(new Dimension(120, 30));
+	   	
+	   	panel3.add(btnSearch);
 	   	
         center = new JPanel(new GridLayout(2, 0, 0, 20));
         center.setOpaque(false);
