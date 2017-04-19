@@ -36,8 +36,8 @@ public class SearchManager {
 		    }
 		    else{
 			    throw new InvalidSearchException("Invalid search");
-		    }		
-			
+		    }	
+						
 			
 	}
 	
@@ -50,6 +50,7 @@ public class SearchManager {
 		    else{
 			    throw new InvalidSearchException("Invalid search");
 		    }		
+	
 	}
 
 

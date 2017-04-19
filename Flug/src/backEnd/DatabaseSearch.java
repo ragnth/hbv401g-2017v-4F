@@ -98,7 +98,7 @@ public class DatabaseSearch {
 	    		   rs.getInt("Price"),
 	    		   rs.getInt("AvailableSeats")
 	    		   );
-	       System.out.println(	    		   
+	     /*  System.out.println(	    		   
 	    		   rs.getString("FlightNumber")+
 	    		   "    "+
 	    		   rs.getString("Airline")+
@@ -115,7 +115,7 @@ public class DatabaseSearch {
 	    		   "    "+
 	    		   rs.getInt("Price")+
 	    		   "    "+
-	    		   rs.getInt("AvailableSeats"));
+	    		   rs.getInt("AvailableSeats"));*/
 	       flightList.add(oneFlight);
 	       
 
