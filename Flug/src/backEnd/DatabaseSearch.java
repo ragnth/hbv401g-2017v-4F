@@ -13,6 +13,8 @@ public class DatabaseSearch {
 	private long departureDate;
 	private long returnDate;
 	private int nrTickets;
+	private Boolean bool;
+	private String temp;
 	//Date returnDate; 
 	private int passengers;
 	
@@ -27,7 +29,7 @@ public class DatabaseSearch {
 		this.origin = chosenDepLocation;
 		this.destination = chosenArrLocation;
 		this.nrTickets = nrTickets;
-		this.passengers = 1; // RANGT - LAGA
+		//this.passengers = 1; // RANGT - LAGA
 		this.outFlightList = new ArrayList<Flight>();
 		this.homeFlightList = new ArrayList<Flight>();
 		searchDatabase(departureDate, origin, destination, nrTickets, outFlightList );
@@ -74,19 +76,28 @@ public class DatabaseSearch {
         		+ ";"); */
 	    
 	    ResultSet rs = stmt.executeQuery( 
-	    		"SELECT * FROM FLIGHTDATA WHERE (DepTime BETWEEN "+ flightDate + " AND " + (flightDate+plus24hrs) 
+	    		
+	    		
+	    		"SELECT * FROM FLIGHTDATA WHERE  (DepTime BETWEEN "+ flightDate + " AND " + (flightDate+plus24hrs) 
         		+ " AND DepartingFrom == '"+chosenDepLocation 
         		+ "' AND ArrivingAt == '"+ chosenArrLocation 
-        		+ "' AND AvailableSeats >= " + chosenNumberOfTickets
-        		+ ") OR "
+        		+ "') OR "
         		+ "( DepTime BETWEEN "+(flightDate)
-        		+ " AND +"+ (flightDate+plus24hrs)+" AND DepartingFrom == '"+chosenDepLocation+"')"
+        		+ " AND +"+ (flightDate+plus24hrs)+" AND DepartingFrom == '"+chosenDepLocation+"'"
+        		+  ")"
         		+ " OR "
         		+ "( DepTime BETWEEN "+(flightDate+plus5hrs)
-        		+ " AND +"+ (flightDate+plus24hrsPlus8hrs)+" AND ArrivingAt == '"+chosenArrLocation+"')"
+        		+ " AND +"+ (flightDate+plus24hrsPlus8hrs)+" AND ArrivingAt == '"+chosenArrLocation+"'"
+        		+ ")"
         		+ ";"); 
 	    
 	    while ( rs.next() ) {
+	    	
+	    	temp = rs.getString("Bags");
+	    	if(temp.equals("TRUE")) bool = true;	
+	    	else bool = false;
+	    	
+	    	 
 	       oneFlight = new  Flight(
 	    		   rs.getString("FlightNumber"),
 	    		   rs.getString("Airline"),
@@ -98,7 +109,7 @@ public class DatabaseSearch {
 	    		   rs.getInt("Price"),
 	    		   rs.getInt("AvailableSeats")
 	    		   );
-	     /*  System.out.println(	    		   
+	       System.out.println(	    		   
 	    		   rs.getString("FlightNumber")+
 	    		   "    "+
 	    		   rs.getString("Airline")+
@@ -111,11 +122,11 @@ public class DatabaseSearch {
 	    		   "    "+	    		 
 	    		   rs.getString("ArrivingAt")+
 	    		   "    "+
-	    		   rs.getBoolean("Bags")+
+	    		   bool+
 	    		   "    "+
 	    		   rs.getInt("Price")+
 	    		   "    "+
-	    		   rs.getInt("AvailableSeats"));*/
+	    		   rs.getInt("AvailableSeats"));
 	       flightList.add(oneFlight);
 	       
 
