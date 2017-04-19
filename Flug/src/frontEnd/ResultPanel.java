@@ -101,7 +101,8 @@ public class ResultPanel extends JPanel {
 	   	search.setDestination(searchInfo.getDestination());
 	   	search.setDepartureDate(searchInfo.getDepartureDate());
 	   	search.setReturnDate(searchInfo.getReturnDate());
-	 
+	   	search.setPassengers(searchInfo.getPassengers());
+	   	search.setRoundTrip(searchInfo.getRoundTrip());
 	   	panel3.add(search);
 	   	
         center = new JPanel(new GridLayout(2, 0, 0, 20));
@@ -233,6 +234,7 @@ public class ResultPanel extends JPanel {
 			
 			book.addActionListener(new ActionListener() {
 		         public void actionPerformed(ActionEvent e) {
+		        	for(int i=0; i<searchInfo.getPassengers(); i++){
 		        	 JTextField kennitala = new JTextField();
 		        	 JTextField fullName = new JTextField();
 		        	 final JComponent[] inputs = new JComponent[] {
@@ -242,13 +244,14 @@ public class ResultPanel extends JPanel {
 		        	         new JLabel("Full name:"),
 		        	         fullName
 		        	 };
-		        	 int result = JOptionPane.showConfirmDialog(null, inputs, "Book flight", JOptionPane.PLAIN_MESSAGE);
+		        	 int result = JOptionPane.showConfirmDialog(null, inputs, "Passenger " + (i+1), JOptionPane.PLAIN_MESSAGE);
 		        	 if (result == JOptionPane.OK_OPTION) {
 		        	    // BookingManager booking = BookingManager(trip1, trip2, );
 		        	 } else {
 		        	     System.out.println("User canceled / closed the dialog, result = " + result);
 		        	 }
 		            
+		         }
 		         }
 		      });
 			
@@ -267,8 +270,6 @@ public class ResultPanel extends JPanel {
 			selectedFlights.setOpaque(false);
 			
 
-
-			
 			
 			JLabel flight1;
 			//Display selected stopover flight
@@ -281,7 +282,7 @@ public class ResultPanel extends JPanel {
 			
 			//For return trip
 			if(roundTrip){
-				
+
 				JLabel flight2;
 				if(trip2.getFlightTwo()!=null)
 					flight2 = new JLabel(trip2.getFlightOne().getOrigin() + " <- " + trip2.getFlightOne().getDestination() + " <- " + trip2.getFlightTwo().getDestination());

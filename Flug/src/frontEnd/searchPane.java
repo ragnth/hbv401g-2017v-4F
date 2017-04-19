@@ -56,25 +56,25 @@ public class searchPane extends JPanel {
 	   	destination.setFont(new Font("Monospaced", Font.PLAIN, 13));
 	   	add(destination);
 	   	
-	   	JLabel LeavingOn = new JLabel("Leaving on");
-	   	LeavingOn.setHorizontalAlignment(SwingConstants.CENTER);
-	   	LeavingOn.setForeground(Color.white);
-	   	LeavingOn.setFont(new Font("Monospaced", Font.PLAIN, 13));
-	   	add(LeavingOn);
+	   	JLabel lblLeavingOn = new JLabel("Leaving on");
+	   	lblLeavingOn.setHorizontalAlignment(SwingConstants.CENTER);
+	   	lblLeavingOn.setForeground(Color.white);
+	   	lblLeavingOn.setFont(new Font("Monospaced", Font.PLAIN, 13));
+	   	add(lblLeavingOn);
 	   	
-	   	JLabel ReturningOn = new JLabel("Returning On");
-	   	ReturningOn.setHorizontalAlignment(SwingConstants.CENTER);
-	   	ReturningOn.setForeground(Color.white);
-	   	ReturningOn.setFont(new Font("Monospaced", Font.PLAIN, 13));
-	   	add(ReturningOn);
+	   	JLabel lblReturningOn = new JLabel("Returning On");
+	   	lblReturningOn.setHorizontalAlignment(SwingConstants.CENTER);
+	   	lblReturningOn.setForeground(Color.white);
+	   	lblReturningOn.setFont(new Font("Monospaced", Font.PLAIN, 13));
+	   	add(lblReturningOn);
 	   	
 
 	   	
-	   	JLabel Passengers = new JLabel("Passengers");
-	   	Passengers.setHorizontalAlignment(SwingConstants.CENTER);
-	   	Passengers.setForeground(Color.white);
-	   	Passengers.setFont(new Font("Monospaced", Font.PLAIN, 13));
-	   	add(Passengers);
+	   	JLabel lblPassengers = new JLabel("Passengers");
+	   	lblPassengers.setHorizontalAlignment(SwingConstants.CENTER);
+	   	lblPassengers.setForeground(Color.white);
+	   	lblPassengers.setFont(new Font("Monospaced", Font.PLAIN, 13));
+	   	add(lblPassengers);
 	   	
 	   	
 	   	roundTrip = new JCheckBox();
@@ -154,5 +154,13 @@ public class searchPane extends JPanel {
 	
 	public void setReturnDate(Date date){
 		returnDate.setDate(date);
+	}
+	
+	public void setPassengers(int k){
+		passengers.setSelectedItem(k);
+	}
+	
+	public void setRoundTrip(Boolean rt){
+		roundTrip.setSelected(rt);
 	}
 }
