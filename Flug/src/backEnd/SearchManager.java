@@ -1,5 +1,7 @@
 package backEnd;
 
+import java.sql.*;
+
 import java.util.ArrayList;
 import org.joda.time.DateTime;
 
@@ -14,40 +16,70 @@ public class SearchManager {
 	private FlightStorage mockObject; //mock object 
 	private ArrayList<Trip> departResults;
 	private ArrayList<Trip> returnResults;
+	
+	
+	// ### PART OF SQL DATABASE CONNECTIVITY
+	private DatabaseSearch dbSearch;
+	private ArrayList<Trip> departResultsFromDB;
+	private ArrayList<Trip> returnResultsFromDB;
+	// ###
+	
 	public SearchInfo searchInfo;
 	
 
 
-	public SearchManager(String origin, String destination, 
-			Date departureDate, Date returnDate, int passengers, Boolean roundTrip) 
+	public SearchManager(String origin, String destination, Date departureDate, Date returnDate, int passengers, Boolean roundTrip) 
 					throws InvalidSearchException{
 			if( !origin.equals(destination) && departureDate!=null && returnDate!= null && departureDate.after(Calendar.getInstance().getTime()) && 
 					passengers>0 && departureDate.before(returnDate)) {
 				searchInfo = new SearchInfo(origin, destination, departureDate, returnDate, passengers, roundTrip);		
-		}
-		else{
-			throw new InvalidSearchException("Invalid search");
-		}		
+		    }
+		    else{
+			    throw new InvalidSearchException("Invalid search");
+		    }		
 			
 			
 	}
 	
 	public SearchManager(String origin, String destination, Date departureDate, int passengers, Boolean roundTrip) 
 					throws InvalidSearchException{
-			if(!origin.equals(destination) && departureDate!=null&& departureDate.after(Calendar.getInstance().getTime()) && 
+			if(!origin.equals(destination) && departureDate!=null && departureDate.after(Calendar.getInstance().getTime()) && 
 					passengers>0) {
 				 searchInfo = new SearchInfo(origin, destination, departureDate, passengers, roundTrip);			
-		}
-		else{
-			throw new InvalidSearchException("Invalid search");
-		}		
+		    }
+		    else{
+			    throw new InvalidSearchException("Invalid search");
+		    }		
 	}
 
 
 	public void search(){
 		mockObject = new FlightStorage();
+		
+		
 		departResults = new ArrayList<Trip>();
 		returnResults = new ArrayList<Trip>();
+		
+		// ### PART OF DATABASE CONNECTIVITY
+		departResultsFromDB = new ArrayList<Trip>();
+		returnResultsFromDB = new ArrayList<Trip>();
+		
+		if(searchInfo.getRoundTrip())
+		{
+		    dbSearch = new DatabaseSearch(searchInfo.getDepartureDate().getTime(),searchInfo.getReturnDate().getTime(), searchInfo.getOrigin(), searchInfo.getDestination(), searchInfo.getPassengers()); // NÝTT
+			System.out.println("populating departResults");
+		    departResultsFromDB.addAll(searchTripsForDB(searchInfo.getOrigin(), searchInfo.getDestination(), searchInfo.getDepartureDate(),dbSearch.getOutFlightList()));
+			System.out.println("populating returnResults");
+		    returnResultsFromDB.addAll(searchTripsForDB(searchInfo.getDestination(), searchInfo.getOrigin(), searchInfo.getReturnDate(),dbSearch.getHomeFlightList()));
+
+		}
+		else
+		{
+		    dbSearch = new DatabaseSearch(searchInfo.getDepartureDate().getTime(), searchInfo.getOrigin(), searchInfo.getDestination(), searchInfo.getPassengers()); // NÝTT
+		    departResultsFromDB.addAll(searchDirectForDB(searchInfo.getOrigin(), searchInfo.getDestination(), searchInfo.getDepartureDate(),dbSearch.getOutFlightList()));
+		}
+		// ###
+		
 		//Find outbound trips
 		departResults.addAll(searchTrips(searchInfo.getOrigin(), searchInfo.getDestination(), searchInfo.getDepartureDate()));
 		departResults.addAll(searchDirect(searchInfo.getOrigin(), searchInfo.getDestination(), searchInfo.getDepartureDate()));
@@ -93,6 +125,45 @@ public class SearchManager {
 	}
 	
 	
+	// ### PART OF DATABASE CONNECTIVITY
+	public ArrayList<Trip> searchDirectForDB(String from, String to, Date date,ArrayList<Flight> flightList){
+		ArrayList<Trip> tempList = new ArrayList<Trip>(); 
+		System.out.println("direct");
+		for(Flight temp: flightList){
+			if(temp.getOrigin().equals(from)  && temp.getDestination().equals(to) && compareDates(temp.getDepartureTime(), date))
+					tempList.add(new Trip(temp));
+			}
+		return tempList;
+		}
+	
+	@SuppressWarnings("deprecation")
+	public ArrayList<Trip> searchTripsForDB(String from, String to, Date date, ArrayList<Flight> flightList){
+		ArrayList<Trip> tripList = new ArrayList<Trip>();
+        System.out.println("Inside searchTripsForDB");
+		
+		for (Flight temp : flightList) {
+	        
+
+			if(temp.getOrigin().equals(from) && temp.getDestination().equals(to)){
+				System.out.println("found A to B flight");
+				tripList.add(new Trip(temp));	
+			}
+		}
+        
+		for (Flight temp : flightList) {
+				for(Flight temp2: flightList){
+					if(temp.getDestination().equals(temp2.getOrigin()) && isStopoverPossible(temp.getArrivalTime(), temp2.getDepartureTime())) 
+					{
+						System.out.println("found A to C to B flight");
+			            tripList.add(new Trip(temp, temp2));
+					}
+		        }	
+		}
+		return tripList;		
+	}
+	// ###
+	
+	
 	
 	//Input: flight1.arrivalTime, flight2.departureTime
 	public Boolean isStopoverPossible(Date flight1, Date flight2){
@@ -122,11 +193,11 @@ public class SearchManager {
 	}
 	
 	public ArrayList<Trip> getOutgoingTrips(){
-		return departResults;
+		return departResultsFromDB;
 	}
 	
 	public ArrayList<Trip> getReturnTrips(){
-		return returnResults;
+		return returnResultsFromDB;
 	}
 	
 	public Boolean getRoundTrip(){
