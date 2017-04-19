@@ -8,7 +8,7 @@ public class SearchInfo {
 	private Date departureDate;
 	private Date returnDate;
 	private Boolean roundTrip;
-	private int passenger;
+	private int passengers;
 	
 	//For return flights
 	public SearchInfo(String origin, String destination, Date departureDate, Date returnDate, int passengers, Boolean roundTrip){
@@ -17,7 +17,7 @@ public class SearchInfo {
 		this.departureDate = departureDate;
 		this.returnDate = returnDate;
 		this.roundTrip = roundTrip;
-		this.passenger = passengers;
+		this.passengers = passengers;
 	}
 	
 	//For non-return flights
@@ -26,7 +26,7 @@ public class SearchInfo {
 		this.destination = destination;
 		this.departureDate = departureDate;
 		this.roundTrip = roundTrip;
-		this.passenger = passengers;
+		this.passengers = passengers;
 	}
 	
 	
@@ -48,5 +48,9 @@ public class SearchInfo {
 	
 	public Boolean getRoundTrip(){
 		return roundTrip;
+	}
+	
+	public int getPassengers(){
+		return passengers;
 	}
 }
