@@ -1,0 +1,232 @@
+package backEnd;
+
+import java.sql.*;
+//import java.text.SimpleDateFormat;
+//import java.util.ArrayList;
+//import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+//import java.util.Random;
+
+// test.db is automatically made and put in the src folder
+public class gagna
+{
+    @SuppressWarnings("deprecation")
+	public static void main( String args[] )
+    {   
+    	
+    	// Start variables for flight search in database
+    	long chosenDepTime = 1497225600000L; 
+    	long plus24hrs = 3600*24;
+        String chosenDepLocation = "Norway";
+        String chosenArrLocation = "Denmark";
+        int chosenNumberOfTickets = 2;
+    	
+
+        
+    	String[] countries = generateCountryNames();
+    	
+    	
+    	
+        int verd;
+        long[] times;
+        String[] airlines = {
+        	"Air Faux","AirFlow","CrazyBird Airlines","Wow Air",
+        	"Iceland Air","Aeroflot","Lufthansa","Essential Air",
+        	"FreshAir Airlines","CleanAir Airlines","Aeronautica",
+        	"Air Dubious","Dormant Island Air ","Valhalla Express",
+        	"Supersonic Express","Dreamway Air Travel",
+        	"Con Air Cargo","SuperSoup Air","Airborne Bonanza",
+        	"Air Arabia","Lightning Hippo Air Service",
+        	"Sky Shuttle Professionals","Norwegian",
+        	"Primera Air","Skytrain Air Service"		
+        };
+        String[] airlineID = {
+        	"AF","AI","CB","WA","IA","AT","LH","EA","FA","CA","AN","AD","DI","VE","SE","DT","CA","SP","AB","AA","LH","SP","NW","PR","SY"
+        };
+   
+        // SQLite uses dynamic typing. It does not enforce data type constraints.
+    	Connection c = null;
+        Statement stmt = null;
+        
+        //Make a table
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:flightDatabase.db");
+            System.out.println("Opened database successfully");
+            
+            stmt = c.createStatement();
+            String sql = "CREATE TABLE FLIGHTDATA (FlightNumber "
+            		+ "String, Airline String,DepTime timestamp, ArrTime timestamp,"
+            		+ " DepartingFrom string, ArrivingAt string, Bags int,"
+            		+ " Price int,AvailableSeats int); " ;
+            stmt.executeUpdate(sql);
+            stmt.close();
+            c.close();
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+        System.out.println("Table created successfully");
+        
+        
+        // Makes data for the database
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:flightDatabase.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");  
+            stmt = c.createStatement();
+            
+            for(int i=1;i<3000000;i++) {
+            	verd = 8000 + (int)(Math.random()*100000);
+            	times = generateDates();
+            	boolean bags = bags();
+            	int availSeats = availableSeats();
+            	String[] airline = airline(airlines,airlineID);
+            	String[] strK = generateCountries(countries);
+            
+			    String sql = "insert into FLIGHTDATA (FlightNumber,Airline,DepTime,"
+			    		+ " ArrTime, DepartingFrom, ArrivingAt, "
+			    		+ "Bags,Price,AvailableSeats) values ( '"+airline[1]+"','"
+			    	    +airline[0]+"'," + times[0] + ","+ times[1] +",'" 
+			    		+ strK[0] +"','"+strK[1]+"','"+bags+"',"+verd+","+availSeats+" );";
+                stmt.executeUpdate(sql);
+           
+            }
+            stmt.close();
+            c.commit();
+            c.close();
+        } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+        }
+        System.out.println("Records created successfully"); 
+        
+        
+        // Search in database
+        try {
+            Class.forName("org.sqlite.JDBC");
+            c = DriverManager.getConnection("jdbc:sqlite:flightDatabase.db");
+            c.setAutoCommit(false);
+            System.out.println("Opened database successfully");
+            
+            // SQL searches database. 
+            stmt = c.createStatement();
+            ResultSet rs = stmt.executeQuery( "SELECT * FROM FLIGHTDATA WHERE DepTime >= "+ chosenDepTime 
+            		+  " AND DepTime <= "+ chosenDepTime+plus24hrs 
+            		+ " AND DepartingFrom == '"+chosenDepLocation 
+            		+ "' AND ArrivingAt == '"+ chosenArrLocation 
+            		+ "' AND AvailableSeats >= " + chosenNumberOfTickets
+            		+ ";"); 
+            while ( rs.next() ) {
+               String flightNumber = rs.getString("FlightNumber");
+               String  airline = rs.getString("Airline");
+               Date depTime  = rs.getDate("DepTime");
+               Date arrTime = rs.getDate("ArrTime");
+               int availSeats = rs.getInt("AvailableSeats");
+        
+               System.out.println( "Flight Number = "+ flightNumber
+            		                +" Airline = " + airline
+            		                +", Departure Time = " + depTime.toLocaleString()
+                                    +", Arrival Time = " + arrTime.toLocaleString()
+                                    +", Available Seats = " + availSeats
+                                    );
+               
+               
+            
+            }
+            rs.close();
+            stmt.close();
+            c.close();
+          } catch ( Exception e ) {
+            System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+            System.exit(0);
+          }
+          System.out.println("Operation done successfully");
+    }
+
+    // Þetta fall býr til dagsetningu (Departure) og dagsetningu (Arrival) fyrir hverja línu gagnagrunnsins
+    // Arrival er útfært þannig að  tímasetningin er alltaf  allavega klukkutíma + í mesta lagi 11 klukkutíma
+    // á eftir Departure
+    // Formið er long, sem kóðar tímasetninguna sem langa heiltölu upp á sekúndu (hér í raun millisekúndu sem 000 aftast)
+	public static long[] generateDates(){	
+			int a = 0 + (int)(Math.random()*12); //Bua til manud
+			int b = 1 + (int)(Math.random()*30); // Bua til dagsetningu
+			int e = 1 + (int)(Math.random()*24); //Bua til klukkutima
+			int c = 1 + (int)(Math.random()*60); // Bua til minutu
+			int m = 1 + (int)(Math.random()*60); // bua til sek
+			@SuppressWarnings("deprecation")
+			Date d = new Date(117, a, b, e, c, m);
+			long depTemp = d.getTime();
+			long dTemp = depTemp/1000;
+			int dT = (int)dTemp;
+			int aT = dT+3600+(int)(Math.random()*3600*11);
+			//long durationInSec = (aT-dT);
+			long arrTemp = aT*1000L; //vegna þess að klukkutíminn er 3600 sekúndur og svo bætast við * 1000 millisekúndur
+			long[] times = {depTemp,arrTemp/*,durationInSec*/};
+			return times;
+	}
+	
+	// Þetta fall býr til tvö lönd í hverja línu í gagnagrunninum. Formið er raunverulega nafnið á landinu - strengur
+	public static String[] generateCountries(String[] countries){
+		int len = countries.length;
+    	int k = (int) (Math.random()*len);
+    	int j = (int) (Math.random()*len);
+    	//til að passa að maður velji ekki sama landið:
+    	while(k==j) {
+    		j = (int) (Math.random()*len);   		
+    	}
+    	String str1 = countries[k];
+    	String str2 = countries[j];
+    
+    	String[] strF = {str1,str2};
+    	return strF;
+	}
+	
+	// Þetta fall velur flugfélag og býr til flugnúmer fyrir hverja línu í gagnagrunninum
+	public static String[] airline(String[] airlines,String[] airlineID) {
+		int chooseAirline = (int) (Math.random()*airlines.length);
+		String airline = airlines[chooseAirline];
+		String str1 = airlineID[chooseAirline];
+		for(int i=0;i<4;i++){
+			str1=str1+(int) (Math.random()*9);	
+		} 
+		String[] strR = {airline,str1};
+        return strR;
+	}
+	
+	// Þetta fall skilar true í 70% tilvika og false í 30% tilvika. Fyrir töskurnar.
+	// Setur annaðhvort true eða false í hverja línu í gagnagrunninum
+	public static boolean bags(){
+		double i = Math.random();
+		boolean a;
+		if (i <= 0.7) {
+			a = true;
+		}
+		else {
+			a = false;
+		}
+		return a;	
+	}
+	
+	// Þetta fall setur handahófskennda heiltölu á milli 0 og 200 í hverja línu í gagnagrunninum
+	public static int availableSeats(){
+		int i = (int)(Math.random()*200);
+		return i;	
+	}
+	
+	// Þetta fall er bara keyrt einu sinni í upphafi til að breyta ISO nöfnunum í alvöru nöfn.
+	public static String[] generateCountryNames(){
+	    String[] locales = Locale.getISOCountries();
+		String[] countryStrings = new String[250];
+		int i=0;
+		for (String countryCode : locales) {			
+			Locale obj = new Locale("", countryCode);
+			countryStrings[i]=obj.getDisplayCountry();
+			i++;
+		}
+		countryStrings[44]="Ivory Coast";
+		return countryStrings;
+	} 
+}

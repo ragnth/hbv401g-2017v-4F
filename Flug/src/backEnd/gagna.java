@@ -8,28 +8,25 @@ import java.util.Date;
 import java.util.Locale;
 //import java.util.Random;
 
-// test.db srkáin er sjálfkrafa búin til og sett í sömu möppu og src
+// test.db is automatically made and put in the src folder
 public class gagna
 {
     @SuppressWarnings("deprecation")
 	public static void main( String args[] )
     {   
     	
-    	// Ég set eftirfarandi breytur inn sem leit að flugi.
-    	// Þær eru hér til þess að leitin í gagnagrunninum niðri hafi gildi á breytum.sem þar eru.
+    	// Start variables for flight search in database
     	long chosenDepTime = 1497225600000L; 
     	long plus24hrs = 3600*24;
         String chosenDepLocation = "Norway";
         String chosenArrLocation = "Denmark";
         int chosenNumberOfTickets = 2;
     	
-    	
-    	
-    	
+
+        
     	String[] countries = generateCountryNames();
     	
     	
-
     	
         int verd;
         long[] times;
@@ -52,7 +49,7 @@ public class gagna
     	Connection c = null;
         Statement stmt = null;
         
-        //Býr til töflu
+        //Make a table
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:flightDatabase.db");
@@ -73,7 +70,7 @@ public class gagna
         System.out.println("Table created successfully");
         
         
-        // Bý til gögnin fyrir gagnagrunninn
+        // Makes data for the database
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:flightDatabase.db");
@@ -107,18 +104,17 @@ public class gagna
         System.out.println("Records created successfully"); 
         
         
-        // Eftirfarandi er leit í gagnagrunninum eftir að hann hefur verið búinn til. Flugið sem leitað er að er skilgreint í breytunum efst í klasanum.
+        // Search in database
         try {
             Class.forName("org.sqlite.JDBC");
             c = DriverManager.getConnection("jdbc:sqlite:flightDatabase.db");
             c.setAutoCommit(false);
             System.out.println("Opened database successfully");
             
-            // Eftirfarandi er SQL skipunin sem leitar í gagnagrunninum. Ath að sett hefur verið '" "' þar sem strengur á að vera í skipuninni.
+            // SQL searches database. 
             stmt = c.createStatement();
             ResultSet rs = stmt.executeQuery( "SELECT * FROM FLIGHTDATA WHERE DepTime >= "+ chosenDepTime 
-            		+  " AND DepTime <= "+ chosenDepTime+plus24hrs // Það er semsagt leitað á ákveðnum degi á milli klukkan 00:00 og 23:59. 
-            		//Ath að dagsetningin er á töluformi sem er gott fyrir útreikninga
+            		+  " AND DepTime <= "+ chosenDepTime+plus24hrs 
             		+ " AND DepartingFrom == '"+chosenDepLocation 
             		+ "' AND ArrivingAt == '"+ chosenArrLocation 
             		+ "' AND AvailableSeats >= " + chosenNumberOfTickets
