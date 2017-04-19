@@ -232,28 +232,6 @@ public class ResultPanel extends JPanel {
 				
 			});	
 			
-			book.addActionListener(new ActionListener() {
-		         public void actionPerformed(ActionEvent e) {
-		        	for(int i=0; i<searchInfo.getPassengers(); i++){
-		        	 JTextField kennitala = new JTextField();
-		        	 JTextField fullName = new JTextField();
-		        	 final JComponent[] inputs = new JComponent[] {
-		        	         new JLabel("Kennitala:"),
-		        	         kennitala,
-		        	   
-		        	         new JLabel("Full name:"),
-		        	         fullName
-		        	 };
-		        	 int result = JOptionPane.showConfirmDialog(null, inputs, "Passenger " + (i+1), JOptionPane.PLAIN_MESSAGE);
-		        	 if (result == JOptionPane.OK_OPTION) {
-		        	    // BookingManager booking = BookingManager(trip1, trip2, );
-		        	 } else {
-		        	     System.out.println("User canceled / closed the dialog, result = " + result);
-		        	 }
-		            
-		         }
-		         }
-		      });
 			
 		
 			pnlBook.add(book);

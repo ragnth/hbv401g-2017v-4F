@@ -23,8 +23,9 @@ public class searchPane extends JPanel {
 	JComboBox passengers;
 	JXDatePicker departureDate;
 	JXDatePicker returnDate;
-	String[] locales = Locale.getISOCountries();
-	Locale[] countries;
+	String[] prelocales = Locale.getISOCountries();
+	String[] locales = new String[50];
+ 	Locale[] countries;
    	Integer[] pass = {1,2,3,4,5,6,7,8,9};
 	private Color background = new Color(49,219,205);
 	private Color inputColor = new Color(155, 237, 231);
@@ -132,11 +133,19 @@ public class searchPane extends JPanel {
 	public void setUpAutoComplete(){
 		countries = new Locale[250];
 		int i=0;
-		for (String countryCode : locales) {			
+		for (String countryCode : prelocales) {			
 			Locale obj = new Locale("", countryCode);
 			countries[i]=obj;
-			locales[i] = countries[i].getDisplayCountry();
+			prelocales[i] = countries[i].getDisplayCountry();
 			i++;
+		}
+		prelocales[44]="Ivory Coast";
+		prelocales[1] ="Iceland";
+		prelocales[3] = "Palestine";
+		prelocales[5] = "Israel";
+		
+		for(int j=0;j<50;j++) {
+			locales[j] = prelocales[j];
 		}
 	}
 	

@@ -14,6 +14,7 @@ import javax.swing.border.EmptyBorder;
 import com.toedter.components.JLocaleChooser;
 
 import backEnd.InvalidSearchException;
+import backEnd.Passenger;
 import backEnd.SearchManager;
 import backEnd.Trip;
 
@@ -42,6 +43,7 @@ public class InterfaceManager extends JFrame {
 	private String destination;
 	private Date departureDate;
 	private Date returnDate;
+
 
 
 
@@ -96,24 +98,29 @@ public class InterfaceManager extends JFrame {
 					
 					 result.book.addActionListener(new ActionListener() {
 				         public void actionPerformed(ActionEvent e) {
-				        	 JTextField kennitala = new JTextField();
+				           ArrayList<Passenger> passengerList = new ArrayList<Passenger>();
+				           for(int i = 0; i<search.getPassengers(); i++){
+				        	
+				        	 JTextField idNumber = new JTextField();
 				        	 JTextField fullName = new JTextField();
 				        	 final JComponent[] inputs = new JComponent[] {
-				        	         new JLabel("Kennitala:"),
-				        	         kennitala,
+				        	         new JLabel("ID number:"),
+				        	         idNumber,
 				        	   
 				        	         new JLabel("Full name:"),
 				        	         fullName
 				        	 };
-				        	 int result = JOptionPane.showConfirmDialog(null, inputs, "Book flight", JOptionPane.PLAIN_MESSAGE);
-				        	 if (result == JOptionPane.OK_OPTION) {
-				        	     System.out.println("You entered " +
-				        	             kennitala.getText() + ", " +
-				        	             fullName.getText());
-				        	 } else {
-				        	     System.out.println("User canceled / closed the dialog, result = " + result);
-				        	 }
-				            
+				        	 
+					        	 int result = JOptionPane.showConfirmDialog(null, inputs, "Passenger " + (i+1), JOptionPane.PLAIN_MESSAGE);
+					        	 if (result == JOptionPane.OK_OPTION) {
+					        	   
+					        	 } else {
+					        	     System.out.println("User canceled / closed the dialog, result = " + result);
+					        	 }
+					        	 
+					        	passengerList.add(new Passenger(Integer.parseInt(idNumber.getText().toString()), fullName.getText().toString()));
+					            
+					         }
 				         }
 				      });
 					
