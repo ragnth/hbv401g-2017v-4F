@@ -18,6 +18,7 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.SwingConstants;
 
+import backEnd.Passenger;
 import backEnd.SearchInfo;
 import backEnd.Trip;
 
@@ -51,10 +52,10 @@ public class ResultPanel extends JPanel {
     SearchInfo searchInfo;
     private Color background = new Color(49,219,205);
     private Color btnColor = new Color(34, 195, 182);
-    private searchPane searchBar;
+    private SearchBar searchBar;
     public SearchButton btnSearch;
 	
-	public ResultPanel(ArrayList<Trip> outgoingTrips, ArrayList<Trip> returnTrips, Boolean roundTrip, SearchInfo searchInfo, searchPane searchPane) {
+	public ResultPanel(ArrayList<Trip> outgoingTrips, ArrayList<Trip> returnTrips, Boolean roundTrip, SearchInfo searchInfo, SearchBar searchPane) {
 		setSize(1000, 800);
 		setBackground(background);
 	   	setLayout(new BorderLayout());
@@ -233,6 +234,35 @@ public class ResultPanel extends JPanel {
 				}
 				
 			});	
+			 book.addActionListener(new ActionListener() {
+		         public void actionPerformed(ActionEvent e) {
+		           ArrayList<Passenger> passengerList = new ArrayList<Passenger>();
+		           for(int i = 0; i<searchInfo.getPassengers(); i++){
+		        	
+		        	 JTextField idNumber = new JTextField();
+		        	 JTextField fullName = new JTextField();
+		        	 final JComponent[] inputs = new JComponent[] {
+		        	         new JLabel("ID number:"),
+		        	         idNumber,
+		        	   
+		        	         new JLabel("Full name:"),
+		        	         fullName
+		        	 };
+		        	 
+			        	 int result = JOptionPane.showConfirmDialog(null, inputs, "Passenger " + (i+1), JOptionPane.PLAIN_MESSAGE);
+			        	 if (result == JOptionPane.OK_OPTION) {
+			        	   
+			        	 } else {
+			        	     System.out.println("User canceled / closed the dialog, result = " + result);
+			        	 }
+			        	 
+			        	passengerList.add(new Passenger(Integer.parseInt(idNumber.getText().toString()), fullName.getText().toString()));
+			            
+			         }
+		        	 JOptionPane.showConfirmDialog(null,"You're done! Your booking has been saved in the booking database. Kinda!", "Booking complete!!!", JOptionPane.PLAIN_MESSAGE);
+
+		         }
+		      });
 			
 			
 		

@@ -34,7 +34,7 @@ import javax.swing.SwingConstants;
 public class SearchPanel extends JPanel {
 	
 	private SearchManager controller;
-	private searchPane searchPane;
+	private SearchBar searchPane;
 	private JLabel logo;
 	private Color background = new Color(49,219,205);
     private Color btnColor = new Color(34, 195, 182);
@@ -57,7 +57,7 @@ public class SearchPanel extends JPanel {
 		panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
 		add(panel, BorderLayout.CENTER);
-		searchPane = new searchPane();
+		searchPane = new SearchBar();
 		searchPane.setPreferredSize(new Dimension(700, 50));
 		panel.add(searchPane);
 		
@@ -126,7 +126,7 @@ public class SearchPanel extends JPanel {
 		return searchPane.roundTrip.isSelected();
 	}
 	
-	public searchPane getSearchPane(){
+	public SearchBar getSearchPane(){
 		return searchPane;
 	}
 	

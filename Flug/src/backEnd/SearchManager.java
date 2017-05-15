@@ -77,7 +77,7 @@ public class SearchManager {
 		else
 		{
 		    dbSearch = new DatabaseSearch(searchInfo.getDepartureDate().getTime(), searchInfo.getOrigin(), searchInfo.getDestination(), searchInfo.getPassengers()); // NÝTT
-		    departResultsFromDB.addAll(searchDirectForDB(searchInfo.getOrigin(), searchInfo.getDestination(), searchInfo.getDepartureDate(),dbSearch.getOutFlightList()));
+		    departResultsFromDB.addAll(searchTripsForDB(searchInfo.getOrigin(), searchInfo.getDestination(), searchInfo.getDepartureDate(),dbSearch.getOutFlightList()));
 		}
 		// ###
 		
@@ -128,13 +128,13 @@ public class SearchManager {
 	
 	// ### PART OF DATABASE CONNECTIVITY
 	public ArrayList<Trip> searchDirectForDB(String from, String to, Date date,ArrayList<Flight> flightList){
-		ArrayList<Trip> tempList = new ArrayList<Trip>(); 
+		ArrayList<Trip> tripList = new ArrayList<Trip>(); 
 		System.out.println("direct");
 		for(Flight temp: flightList){
 			if(temp.getOrigin().equals(from)  && temp.getDestination().equals(to) && compareDates(temp.getDepartureTime(), date))
-					tempList.add(new Trip(temp));
+					tripList.add(new Trip(temp));
 			}
-		return tempList;
+		return tripList;
 		}
 	
 	@SuppressWarnings("deprecation")
@@ -178,8 +178,8 @@ public class SearchManager {
 	}
 	
 	public void increasingPriceOrder(){
-		Collections.sort(departResults, new CustomComparator());
-		Collections.sort(returnResults, new CustomComparator());
+		Collections.sort(departResultsFromDB, new CustomComparator());
+		Collections.sort(returnResultsFromDB, new CustomComparator());
 	}
 	
 	public Boolean compareDates(Date d1, Date d2){

@@ -132,33 +132,7 @@ public class InterfaceManager extends JFrame {
 				}
 			
 			});
-			 result.book.addActionListener(new ActionListener() {
-		         public void actionPerformed(ActionEvent e) {
-		           ArrayList<Passenger> passengerList = new ArrayList<Passenger>();
-		           for(int i = 0; i<search.getPassengers(); i++){
-		        	
-		        	 JTextField idNumber = new JTextField();
-		        	 JTextField fullName = new JTextField();
-		        	 final JComponent[] inputs = new JComponent[] {
-		        	         new JLabel("ID number:"),
-		        	         idNumber,
-		        	   
-		        	         new JLabel("Full name:"),
-		        	         fullName
-		        	 };
-		        	 
-			        	 int result = JOptionPane.showConfirmDialog(null, inputs, "Passenger " + (i+1), JOptionPane.PLAIN_MESSAGE);
-			        	 if (result == JOptionPane.OK_OPTION) {
-			        	   
-			        	 } else {
-			        	     System.out.println("User canceled / closed the dialog, result = " + result);
-			        	 }
-			        	 
-			        	passengerList.add(new Passenger(Integer.parseInt(idNumber.getText().toString()), fullName.getText().toString()));
-			            
-			         }
-		         }
-		      });
+			
 			
 	
 		}
@@ -168,7 +142,7 @@ public class InterfaceManager extends JFrame {
 		}
 	}
 	
-	public searchPane getSearchBar(){
+	public SearchBar getSearchBar(){
 		return search.getSearchPane();
 	}
 

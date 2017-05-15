@@ -110,6 +110,9 @@ public class IndividualPanel extends JPanel {
 		price.setHorizontalAlignment(SwingConstants.CENTER);
 		rightPanel.add(price);
 		
+		
+		System.out.println(trip.getFlightOne().getBags());
+
 		if(trip.getFlightOne().getBags()){
 			JLabel icon = new JLabel();
 			icon.setHorizontalAlignment(SwingConstants.CENTER);
